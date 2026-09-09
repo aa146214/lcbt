@@ -1,0 +1,46 @@
+/* ---------------------------------------------------------
+   DESIGN TOKENS — flat brand system, no gradients.
+   White base to match the live site, LCBT's deep plum as the
+   primary dark/text colour, one flat pink accent for actions.
+
+   FONT: Gotham, LCBT's own typeface, self-hosted from
+   public/fonts — see fonts.css. Poppins is kept as the first
+   fallback because it was the stand-in the design was drawn
+   against, so a failed font load degrades to something with
+   the right rhythm rather than to Arial.
+--------------------------------------------------------- */
+:root {
+  --bg: #ffffff;
+  --surface: #f7f2f6;
+  --surface-alt: #f1e9ef;
+  --plum: #19061c;
+  --pink: #e01e6f;
+  --gold: #c98a1f;
+  --text: #19061c;
+  --text-dim: #6e5c6a;
+  --border: #e5dae3;
+  --grey: #9c8a98;
+
+  --cat-hair: var(--pink);
+  --cat-beauty: var(--gold);
+  --cat-makeup: var(--plum);
+
+  --font-display: "Gotham", "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Gotham", "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 16px 40px rgba(25, 6, 28, 0.18);
+  --shadow-card-behind: 0 6px 16px rgba(25, 6, 28, 0.08);
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --app-max-width: 430px;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}

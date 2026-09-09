@@ -1,0 +1,207 @@
+{
+  "_source": "Verified against the individual course pages at lcbt.co.uk on 7 Sept 2026. Every live course's blurb, duration, start date, entry requirements and funding is quoted from its own course page. Start dates go stale - the year-long courses read September 2027 and the Level 4 reads September 2026.",
+  "l2-beauty": {
+    "id": "l2-beauty",
+    "kind": "course",
+    "title": "Level 2 Diploma in Beauty Therapy",
+    "level": "Level 2",
+    "category": "beauty",
+    "prerequisite": "none",
+    "audience": "16-18",
+    "blurb": "Learn the practical skills you need to begin a career in beauty therapy. Train in facials, waxing, manicures, pedicures and lash treatments, before progressing to Level 3 to become a fully qualified beauty therapist.",
+    "duration": "1 year, 2 days a week",
+    "entryRequirements": "Recommended Grade 3+ in GCSE English and Maths",
+    "funding": "Fully funded for eligible 16-18-year-olds",
+    "fundingByAge": {
+      "16-18": "Fully funded for eligible 16-18-year-olds"
+    },
+    "url": "https://www.lcbt.co.uk/courses/level-2-diploma-in-beauty-therapy/",
+    "startDate": "September 2027",
+    "source": "course page"
+  },
+  "l2-mua": {
+    "id": "l2-mua",
+    "kind": "course",
+    "title": "Level 2 Diploma in Hair & Media Make-Up",
+    "level": "Level 2",
+    "category": "makeup",
+    "prerequisite": "none",
+    "audience": "16-18",
+    "blurb": "Learn the creative skills you need for a hair styling or make-up career in the world of film, TV and theatre. You'll explore make-up application and hairdressing styles for different occasions, plus self-tanning and lash application.",
+    "duration": "1 year, 2 days a week",
+    "entryRequirements": "Recommended minimum Grade 3 in GCSE English & Maths",
+    "funding": "Fully funded for eligible 16-18s",
+    "fundingByAge": {
+      "16-18": "Fully funded for eligible 16-18s"
+    },
+    "url": "https://www.lcbt.co.uk/courses/level-2-diploma-hair-media-make-up/",
+    "startDate": "September 2027",
+    "source": "course page"
+  },
+  "l2-hair": {
+    "id": "l2-hair",
+    "kind": "course",
+    "title": "Level 2 Diploma in Hairdressing",
+    "level": "Level 2",
+    "category": "hair",
+    "prerequisite": "none",
+    "audience": "16-18",
+    "blurb": "Develop the practical skills you need to start a career in hairdressing. You'll learn the essentials of cutting, colouring, styling and caring for all different hair types, with the opportunity to progress to Level 3.",
+    "duration": "1 year, 2 days a week",
+    "entryRequirements": "Recommended minimum Grade 3 in GCSE English & Maths",
+    "funding": "Fully funded for eligible 16-18s",
+    "fundingByAge": {
+      "16-18": "Fully funded for eligible 16-18s"
+    },
+    "url": "https://www.lcbt.co.uk/courses/level-2-diploma-womens-and-mens-hairdressing/",
+    "startDate": "September 2027",
+    "source": "course page"
+  },
+  "l3-beauty": {
+    "id": "l3-beauty",
+    "kind": "course",
+    "title": "Level 3 Diploma in Beauty Therapy",
+    "level": "Level 3",
+    "category": "beauty",
+    "prerequisite": "prior-study",
+    "audience": "all",
+    "blurb": "Develop the professional skills you need to become a fully qualified beauty therapist. You'll learn complex treatments such as massage, body and facial electrical treatments and epilation.",
+    "duration": "1 year, 2 days a week",
+    "entryRequirements": "Level 2 Diploma in Beauty Therapy",
+    "funding": "Fully funded for 16-18; £3,345 for 19+ (loans available)",
+    "fundingByAge": {
+      "16-18": "Fully funded for 16-18",
+      "19+": "£3,345 (loans available)"
+    },
+    "url": "https://www.lcbt.co.uk/courses/level-3-beauty-therapy-diploma/",
+    "startDate": "September 2027",
+    "source": "course page"
+  },
+  "l3-mua": {
+    "id": "l3-mua",
+    "kind": "course",
+    "title": "Level 3 Diploma in Hair & Media Make-Up",
+    "level": "Level 3",
+    "category": "makeup",
+    "prerequisite": "prior-study",
+    "audience": "all",
+    "blurb": "Build the advanced creative skills you need to become a professional stylist or make-up artist. You'll learn fashion and photographic make-up, creative hairdressing and special effects make-up.",
+    "duration": "1 year, 2 days a week",
+    "entryRequirements": "Level 2 qualification in Hair & Media Make-up or Beauty Therapy",
+    "funding": "Fully funded for 16-18; £3,345 for 19+ (loans available)",
+    "fundingByAge": {
+      "16-18": "Fully funded for 16-18",
+      "19+": "£3,345 (loans available)"
+    },
+    "url": "https://www.lcbt.co.uk/courses/level-3-diploma-in-hair-and-media-make-up/",
+    "startDate": "September 2027",
+    "source": "course page"
+  },
+  "l3-hair": {
+    "id": "l3-hair",
+    "kind": "course",
+    "title": "Level 3 Diploma in Hairdressing",
+    "level": "Level 3",
+    "category": "hair",
+    "prerequisite": "prior-study",
+    "audience": "all",
+    "blurb": "Learn the professional skills you need to become a fully qualified hair stylist. You'll learn advanced cutting, styling and colouring techniques and gain the confidence to enter the industry as a qualified stylist or colour technician.",
+    "duration": "1 year, 2 days a week",
+    "entryRequirements": "Level 2 qualification in Hairdressing",
+    "funding": "Fully funded for 16-18; £2,583 for 19+ (loans available)",
+    "fundingByAge": {
+      "16-18": "Fully funded for 16-18",
+      "19+": "£2,583 (loans available)"
+    },
+    "url": "https://www.lcbt.co.uk/courses/level-3-diploma-in-hairdressing/",
+    "startDate": "September 2027",
+    "source": "course page"
+  },
+  "l4-aesthetic": {
+    "id": "l4-aesthetic",
+    "kind": "course",
+    "title": "19+ CIBTAC Level 4 Diploma in Aesthetic Practice",
+    "level": "Level 4",
+    "category": "beauty",
+    "prerequisite": "prior-study",
+    "audience": "19+",
+    "blurb": "Ideal for those already working as beauty therapists or in related sectors who want to increase their skills, services and earning potential. Teaches a range of popular advanced clinical techniques.",
+    "duration": "18 weeks",
+    "entryRequirements": "Level 3 Beauty Therapy qualification",
+    "funding": "£3,345 (loans available)",
+    "fundingByAge": {
+      "19+": "£3,345 (loans available)"
+    },
+    "url": "https://www.lcbt.co.uk/courses/level-4-diploma-aesthetic-practice/",
+    "startDate": "September 2026",
+    "source": "course page"
+  },
+  "short-courses": {
+    "id": "short-courses",
+    "kind": "course",
+    "title": "Short Courses",
+    "level": "Flexible",
+    "category": "beauty",
+    "prerequisite": "none",
+    "audience": "19+",
+    "available": false,
+    "blurb": "Bite-sized, single-subject courses to build a specific skill fast.",
+    "duration": "Varies, days to weeks",
+    "entryRequirements": "None",
+    "funding": "Self-funded",
+    "url": "https://www.lcbt.co.uk/courses/",
+    "startDate": null,
+    "source": "not a live catalogue entry"
+  },
+  "explore-l2": {
+    "id": "explore-l2",
+    "kind": "collection",
+    "title": "Explore all Level 2 courses",
+    "level": "Level 2",
+    "category": "beauty",
+    "prerequisite": "none",
+    "audience": "16-18",
+    "blurb": "Not sure which one? Browse every Level 2 course we run and see what jumps out.",
+    "duration": "1 year",
+    "entryRequirements": "Recommended minimum Grade 3 in GCSE English & Maths",
+    "funding": "Fully funded for 16-18",
+    "fundingByAge": {
+      "16-18": "Fully funded"
+    },
+    "url": "https://www.lcbt.co.uk/courses/",
+    "startDate": null,
+    "source": "not a live catalogue entry"
+  },
+  "explore-l3": {
+    "id": "explore-l3",
+    "kind": "collection",
+    "title": "Explore all Level 3 courses",
+    "level": "Level 3",
+    "category": "beauty",
+    "prerequisite": "prior-study",
+    "audience": "all",
+    "blurb": "Browse every Level 3 course. Entry requirements vary, so check each one against the Level 2 you hold.",
+    "duration": "1 year",
+    "entryRequirements": "A relevant Level 2 qualification — varies by course",
+    "funding": "Fully funded for 16-18; fees apply for 19+ (loans available)",
+    "url": "https://www.lcbt.co.uk/courses/",
+    "startDate": null,
+    "source": "not a live catalogue entry"
+  },
+  "register-interest": {
+    "id": "register-interest",
+    "kind": "register-interest",
+    "title": "We're always adding new courses",
+    "level": "Coming soon",
+    "category": "makeup",
+    "prerequisite": "none",
+    "audience": "19+",
+    "blurb": "We don't have a match for this yet, but register your interest and we'll let you know the moment something opens up.",
+    "duration": "—",
+    "entryRequirements": "—",
+    "funding": "—",
+    "url": "https://www.lcbt.co.uk/courses/",
+    "startDate": null,
+    "source": "not a live catalogue entry"
+  }
+}

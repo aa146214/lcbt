@@ -1,0 +1,5 @@
+# Source documents and the original prototype. Kept in the repo for
+# provenance, but they play no part in the build and shouldn't be uploaded.
+reference/
+DECISIONS.md
+.claude/

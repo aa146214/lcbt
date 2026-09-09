@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0"
+    />
+    <meta name="theme-color" content="#19061C" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Set VITE_SITE_URL so the share image resolves to an absolute URL;
+         Facebook and LinkedIn will not follow a relative one. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LCBT Course Match" />
+    <meta
+      property="og:description"
+      content="Answer a few quick questions and get matched with your ideal course at London College of Beauty Therapy."
+    />
+    <meta property="og:image" content="%SITE_URL%/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="description"
+      content="Answer a few quick questions and get matched with your ideal course at London College of Beauty Therapy."
+    />
+    <title>LCBT Course Match</title>
+
+    <!-- Gotham is self-hosted (src/styles/fonts.css). Ultra and Bold carry the
+         landing headline and every heading, so preload those two; Book and
+         Medium can arrive with the stylesheet. -->
+    <link
+      rel="preload"
+      href="/fonts/Gotham-Ultra.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/GothamBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- No Google Fonts request: Gotham is self-hosted and covers every weight
+         the design uses, so Poppins would never render. It stays in the CSS
+         stack in tokens.css as a named fallback; if Gotham ever has to be
+         pulled, re-add the stylesheet link here to restore it. -->
+
+    <!-- GA4 / GTM is loaded from src/lib/analytics.ts when VITE_GTM_ID is
+         set, so there is no snippet to paste here. -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

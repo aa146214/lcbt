@@ -1,0 +1,243 @@
+{
+  "_source": "LCBT course finder logic v1.xlsx - sheet 'logic', rows 18-72, reconciled against the live catalogue at lcbt.co.uk/courses (7 Sept 2026). The sheet's hidden rows 11-13 define separate '19+ Level 3' courses that do not exist on the live site: there is one Level 3 diploma per subject, open to both age groups with different funding. The 19+ rules below therefore resolve to l3-* rather than to separate 19+ course records. Rules are evaluated top to bottom; the first whose `when` clause matches wins.",
+  "matchScores": [
+    96,
+    84,
+    71,
+    64
+  ],
+  "rules": [
+    {
+      "id": "16-18-no-prior",
+      "note": "Sheet rows 18-27: 16-18, no previous qualification -> recommend Level 2.",
+      "when": {
+        "age": "16-18",
+        "priorLevel": [
+          "none",
+          "notsure"
+        ]
+      },
+      "results": {
+        "beauty": [
+          "l2-beauty",
+          "l2-mua",
+          "explore-l2"
+        ],
+        "hair": [
+          "l2-hair",
+          "l2-mua",
+          "l2-beauty"
+        ],
+        "makeup": [
+          "l2-mua",
+          "l2-beauty",
+          "l2-hair"
+        ],
+        "all": [
+          "l2-mua",
+          "l2-beauty",
+          "l2-hair"
+        ]
+      },
+      "backfill": "explore-l2"
+    },
+    {
+      "id": "16-18-level2",
+      "note": "Sheet rows 29-36: 16-18 holding a Level 2 -> recommend Level 3. Not reachable while the prior-qualification question is 19+ only (see questions.json).",
+      "when": {
+        "age": "16-18",
+        "priorLevel": [
+          "Level 2",
+          "Level 3"
+        ]
+      },
+      "results": {
+        "beauty": [
+          "l3-beauty",
+          "explore-l3"
+        ],
+        "hair": [
+          "l3-hair",
+          "explore-l3"
+        ],
+        "makeup": [
+          "l3-mua",
+          "explore-l3"
+        ],
+        "all": [
+          "l3-mua",
+          "l3-beauty",
+          "l3-hair"
+        ]
+      },
+      "backfill": "explore-l3"
+    },
+    {
+      "id": "19-plus-no-prior-short-courses",
+      "note": "Sheet rows 39-46: 19+, no previous qualification -> short courses if available.",
+      "when": {
+        "age": "19+",
+        "priorLevel": "none",
+        "shortCoursesAvailable": true
+      },
+      "results": {
+        "beauty": [
+          "short-courses",
+          "register-interest"
+        ],
+        "hair": [
+          "short-courses",
+          "register-interest"
+        ],
+        "makeup": [
+          "short-courses",
+          "register-interest"
+        ],
+        "all": [
+          "short-courses",
+          "register-interest"
+        ]
+      }
+    },
+    {
+      "id": "19-plus-no-prior-no-short-courses",
+      "note": "Sheet rows 39-46, alternative column: nothing available -> register interest only.",
+      "when": {
+        "age": "19+",
+        "priorLevel": "none",
+        "shortCoursesAvailable": false
+      },
+      "type": "registerInterest",
+      "results": {
+        "beauty": [
+          "register-interest"
+        ],
+        "hair": [
+          "register-interest"
+        ],
+        "makeup": [
+          "register-interest"
+        ],
+        "all": [
+          "register-interest"
+        ]
+      }
+    },
+    {
+      "id": "19-plus-level2-short-courses",
+      "note": "Sheet rows 48-54: 19+ holding a Level 2, short courses exist.",
+      "when": {
+        "age": "19+",
+        "priorLevel": "Level 2",
+        "shortCoursesAvailable": true
+      },
+      "results": {
+        "beauty": [
+          "l3-beauty",
+          "short-courses",
+          "l4-aesthetic"
+        ],
+        "hair": [
+          "l3-hair",
+          "short-courses",
+          "l3-mua"
+        ],
+        "makeup": [
+          "l3-mua",
+          "short-courses",
+          "l3-hair"
+        ],
+        "all": [
+          "l3-beauty",
+          "l3-hair",
+          "short-courses"
+        ]
+      },
+      "backfill": "explore-l3"
+    },
+    {
+      "id": "19-plus-level2-no-short-courses",
+      "note": "Sheet rows 56-62: 19+ holding a Level 2, short courses do not exist.",
+      "when": {
+        "age": "19+",
+        "priorLevel": "Level 2",
+        "shortCoursesAvailable": false
+      },
+      "results": {
+        "beauty": [
+          "l3-beauty"
+        ],
+        "hair": [
+          "l3-hair",
+          "l3-mua"
+        ],
+        "makeup": [
+          "l3-mua",
+          "l3-hair"
+        ],
+        "all": [
+          "l3-beauty",
+          "l3-hair"
+        ]
+      },
+      "backfill": "explore-l3"
+    },
+    {
+      "id": "19-plus-level3",
+      "note": "Sheet rows 66-72: 19+ holding a Level 3.",
+      "when": {
+        "age": "19+",
+        "priorLevel": "Level 3"
+      },
+      "results": {
+        "beauty": [
+          "l4-aesthetic",
+          "short-courses"
+        ],
+        "hair": [
+          "short-courses",
+          "l3-mua"
+        ],
+        "makeup": [
+          "short-courses",
+          "l3-hair"
+        ],
+        "all": [
+          "l4-aesthetic",
+          "short-courses"
+        ]
+      },
+      "backfill": "explore-l3"
+    },
+    {
+      "id": "19-plus-level-not-confirmed",
+      "note": "Screen copy s.5 'No-match variant': 19+ whose level could not be confirmed -> register interest.",
+      "when": {
+        "age": "19+",
+        "priorLevel": "notsure"
+      },
+      "type": "registerInterest",
+      "results": {
+        "beauty": [
+          "register-interest"
+        ],
+        "hair": [
+          "register-interest"
+        ],
+        "makeup": [
+          "register-interest"
+        ],
+        "all": [
+          "register-interest"
+        ]
+      }
+    }
+  ],
+  "fallback": {
+    "type": "registerInterest",
+    "ids": [
+      "register-interest"
+    ]
+  },
+  "minDeckSize": 2
+}

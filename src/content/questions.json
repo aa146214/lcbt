@@ -1,0 +1,184 @@
+{
+  "_source": "LCBT-Course-Match-Screen-Content.docx s.2-3 (1 Sept 2026).",
+  "vibeCards": [
+    {
+      "id": "vibe-hair-trim",
+      "text": "Nailing the perfect trim",
+      "image": "/cards/hair-trim.jpg",
+      "weights": {
+        "hair": 2
+      }
+    },
+    {
+      "id": "vibe-hair-blowdry",
+      "text": "Creating a salon-perfect blow dry",
+      "image": "/cards/hair-blowdry.jpg",
+      "weights": {
+        "hair": 2
+      }
+    },
+    {
+      "id": "vibe-makeup-occasion",
+      "text": "Creating the perfect special occasion look",
+      "image": "/cards/makeup-occasion.jpg",
+      "weights": {
+        "makeup": 2
+      }
+    },
+    {
+      "id": "vibe-makeup-fx",
+      "text": "Bringing characters to life with special effects make-up",
+      "image": "/cards/makeup-fx.jpg",
+      "weights": {
+        "makeup": 2
+      }
+    },
+    {
+      "id": "vibe-beauty-skin",
+      "text": "Achieving glowing, healthy skin",
+      "image": "/cards/beauty-skin.jpg",
+      "weights": {
+        "beauty": 2
+      }
+    },
+    {
+      "id": "vibe-beauty-massage",
+      "text": "Helping someone unwind with a relaxing massage",
+      "image": "/cards/beauty-massage.jpg",
+      "weights": {
+        "beauty": 2
+      }
+    },
+    {
+      "id": "vibe-beauty-nails",
+      "text": "Creating trend-led nail looks",
+      "image": "/cards/beauty-nails.jpg",
+      "weights": {
+        "beauty": 2
+      }
+    }
+  ],
+  "interests": [
+    {
+      "id": "beauty",
+      "label": "Beauty Therapy",
+      "phrase": "beauty therapy"
+    },
+    {
+      "id": "hair",
+      "label": "Hairdressing",
+      "phrase": "hairdressing"
+    },
+    {
+      "id": "makeup",
+      "label": "Make-Up",
+      "phrase": "make-up"
+    },
+    {
+      "id": "all",
+      "label": "I love it all",
+      "phrase": "all of it"
+    }
+  ],
+  "questions": [
+    {
+      "id": "age",
+      "layout": "grid",
+      "question": "How old are you?",
+      "sub": "Just so we show you the right funding info.",
+      "reassurance": "Nice one.",
+      "options": [
+        {
+          "id": "16-18",
+          "label": "16-18",
+          "icon": "GraduationCap"
+        },
+        {
+          "id": "19+",
+          "label": "19+",
+          "icon": "UserRound"
+        }
+      ]
+    },
+    {
+      "id": "goal",
+      "layout": "list",
+      "question": "What would you like to do after your qualification?",
+      "sub": "Helps us understand what matters to you.",
+      "reassurance": "Got it, almost there.",
+      "options": [
+        {
+          "id": "career",
+          "label": "Start a career in the industry",
+          "icon": "Briefcase"
+        },
+        {
+          "id": "self",
+          "label": "Start my own beauty business",
+          "icon": "Rocket"
+        },
+        {
+          "id": "improve",
+          "label": "Improve my existing skills",
+          "icon": "TrendingUp"
+        },
+        {
+          "id": "change",
+          "label": "Change careers",
+          "icon": "Repeat"
+        },
+        {
+          "id": "unsure",
+          "label": "Not sure yet",
+          "icon": "HelpCircle"
+        }
+      ]
+    },
+    {
+      "id": "priorQual",
+      "layout": "grid",
+      "question": "Have you completed a beauty, hair or make-up qualification before?",
+      "sub": null,
+      "reassurance": "One more thing.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes",
+          "icon": "Check"
+        },
+        {
+          "id": "no",
+          "label": "No",
+          "icon": "X"
+        }
+      ]
+    },
+    {
+      "id": "level",
+      "layout": "list",
+      "question": "What level qualification do you currently hold?",
+      "sub": "If you're not sure, that's okay too.",
+      "reassurance": "Last question.",
+      "showWhen": {
+        "priorQual": "yes"
+      },
+      "options": [
+        {
+          "id": "Level 2",
+          "label": "Level 2",
+          "icon": "Award"
+        },
+        {
+          "id": "Level 3",
+          "label": "Level 3",
+          "icon": "Award"
+        },
+        {
+          "id": "notsure",
+          "label": "Not sure",
+          "icon": "HelpCircle"
+        }
+      ]
+    }
+  ]
+}

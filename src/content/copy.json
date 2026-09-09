@@ -1,0 +1,96 @@
+{
+  "_source": "LCBT-Course-Match-Screen-Content.docx (1 Sept 2026). All user-facing strings live here.",
+  "appName": "LCBT Course Match",
+  "topBarTitle": "LCBT COURSE MATCH",
+  "landing": {
+    "eyebrow": "✨ LONDON'S NO.1 BEAUTY COLLEGE",
+    "headlineBefore": "Let's find the ",
+    "headlineHighlight": "course",
+    "headlineAfter": " for you.",
+    "steps": [
+      {
+        "emoji": "👉",
+        "text": "Answer a few quick questions"
+      },
+      {
+        "emoji": "💘",
+        "text": "Get matched with your ideal course"
+      },
+      {
+        "emoji": "📩",
+        "text": "Get the details sent straight to you"
+      }
+    ],
+    "cta": "Find my course",
+    "microCopy": "Takes about 30 seconds"
+  },
+  "vibe": {
+    "headline": "What would you be excited to learn?",
+    "sub": "Swipe right if you're into it, left if you're not",
+    "stampRight": "YASSSS",
+    "stampLeft": "NOT FOR ME",
+    "resultHeadline": "Got your vibe. Leaning {interest}.",
+    "resultBody": "Just the essentials left, then we'll calculate your matches properly.",
+    "resultCta": "Continue",
+    "fallbackHeadline": "Didn't love any of those?",
+    "fallbackSub": "No worries, just tap what excites you most."
+  },
+  "calculating": {
+    "message": "Calculating your {interest} matches...",
+    "messageGeneric": "Calculating your matches..."
+  },
+  "results": {
+    "headline": "Your matches are in",
+    "sub": "Swipe right to save, left to skip",
+    "matchBadge": "{pct}% MATCH",
+    "reasoningPrefix": "Matched you",
+    "stampRight": "LIKE",
+    "stampLeft": "SKIP",
+    "detailsOpen": "Tap for details",
+    "detailsClose": "Show less",
+    "labelDuration": "Duration",
+    "labelFunding": "Funding",
+    "emptyHeadline": "Nothing saved yet",
+    "emptyBody": "That's okay, we'll send you your original best match so you don't miss it.",
+    "successHeadline": "Nice picks!",
+    "successBody": "You saved {n} course{s}. Let's get your personalised recommendations sent over.",
+    "continueCta": "Continue",
+    "noMatchHeadline": "Here's what we found",
+    "noMatchSub": "Swipe or tap to continue",
+    "labelEntry": "Entry requirements"
+  },
+  "email": {
+    "headline": "Almost there",
+    "sub": "Pop your email in and we'll send your personalised course recommendations, so you can explore them properly whenever suits you.",
+    "placeholder": "you@email.com",
+    "cta": "Send my matches",
+    "sending": "Sending...",
+    "smallPrint": "We'll use your email to send the course matches you asked for. Marketing is opt-in and you can unsubscribe at any time.",
+    "errorInvalid": "That doesn't look like a valid email address.",
+    "errorSend": "Something went wrong sending your matches. Please try again.",
+    "consentLabel": "Email me about open days, new courses and offers at LCBT."
+  },
+  "confirmation": {
+    "headline": "Check your inbox!",
+    "sub": "Your matches are on their way. Here's one to screenshot in the meantime.",
+    "shareCardHeader": "YOUR {category} MATCH",
+    "shareCta": "Share my match",
+    "shareCopied": "Link copied",
+    "exitCta": "Explore full details on lcbt.co.uk",
+    "exitUrl": "https://www.lcbt.co.uk/courses/",
+    "restart": "Start again"
+  },
+  "goalClause": {
+    "career": "A great foundation if you're ready to start working in the industry.",
+    "self": "This route builds exactly the skills most self-employed therapists start with.",
+    "improve": "A solid way to build on what you already know.",
+    "change": "Plenty of career-changers start exactly here.",
+    "unsure": "No pressure, this keeps your options open while you figure it out."
+  },
+  "reasoningGoal": {
+    "career": "you want to start a career",
+    "self": "you want to start your own business",
+    "improve": "you want to build on your skills",
+    "change": "you want to change careers"
+  }
+}

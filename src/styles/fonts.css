@@ -1,0 +1,39 @@
+/* ---------------------------------------------------------
+   GOTHAM — LCBT's brand typeface, self-hosted.
+
+   The four weights their WordPress theme serves. `font-display: swap`
+   renders in the fallback immediately and swaps when Gotham arrives, so
+   a slow font never leaves the screen blank.
+
+   The CSS uses 500/600/700/800. There is no 600 or 800 face, so the
+   browser rounds up: 600 renders in Bold and 800 in Ultra, which is the
+   behaviour we want for the big landing headline.
+--------------------------------------------------------- */
+@font-face {
+  font-family: "Gotham";
+  src: url("/fonts/Gotham-Book.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gotham";
+  src: url("/fonts/GothamMedium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gotham";
+  src: url("/fonts/GothamBold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gotham";
+  src: url("/fonts/Gotham-Ultra.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
