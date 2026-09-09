@@ -1,8 +1,9 @@
-import { ChevronDown, Sparkles, Star } from "lucide-react";
-import { copy, t } from "../content";
+import { ChevronDown, Medal, Sparkles } from "lucide-react";
+import { copy } from "../content";
 import type { AgeId, Course, VibeCard } from "../content/types";
 import { CATEGORY_STYLE } from "./icons";
 import { fundingFor } from "../lib/matching";
+import type { Medal as MedalRank } from "../lib/matching";
 import type { DeckOffset } from "../lib/useSwipeDeck";
 
 /** Shared positioning for any card in a stack. */
@@ -106,7 +107,7 @@ function DetailRow({
 
 export function CourseCard({
   course,
-  matchPct,
+  medal,
   isTop,
   offset,
   rotation,
@@ -118,7 +119,7 @@ export function CourseCard({
   age,
 }: {
   course: Course;
-  matchPct: number;
+  medal: MedalRank | null;
   isTop: boolean;
   offset: DeckOffset;
   rotation: number;
@@ -153,10 +154,10 @@ export function CourseCard({
         <div className="course-card__mark">
           <Icon size={38} color="#fff" />
         </div>
-        {isRealCourse && (
-          <div className="course-card__match">
-            <Star size={12} fill="var(--gold)" color="var(--gold)" />
-            {t(copy.results.matchBadge, { pct: matchPct })}
+        {isRealCourse && medal && (
+          <div className="course-card__match" data-medal={medal}>
+            <Medal size={13} />
+            {copy.results.medals[medal]}
           </div>
         )}
         <div className="course-card__level">{course.level}</div>

@@ -5,13 +5,7 @@ const DURATION_MS = 1200;
 const RADIUS = 44;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-export function Calculating({
-  interestLabel,
-  onDone,
-}: {
-  interestLabel?: string;
-  onDone: () => void;
-}) {
+export function Calculating({ onDone }: { onDone: () => void }) {
   const [pct, setPct] = useState(0);
   const doneRef = useRef(onDone);
 
@@ -41,10 +35,6 @@ export function Calculating({
     };
   }, []);
 
-  const message = interestLabel
-    ? copy.calculating.message.replace("{interest}", interestLabel)
-    : copy.calculating.messageGeneric;
-
   return (
     <div className="panel" style={{ gap: 22 }}>
       <div className="ring">
@@ -70,7 +60,7 @@ export function Calculating({
         style={{ fontWeight: 600, fontSize: 15, padding: "0 20px" }}
         aria-live="polite"
       >
-        {message}
+        {copy.calculating.message}
       </p>
     </div>
   );

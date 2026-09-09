@@ -7,6 +7,41 @@ Source material lives in [`reference/`](reference/): the prototype, the screen
 copy (1 Sept 2026), the course-finder logic spreadsheet, and the GA4 tracking
 plan.
 
+## Client feedback round, 9 Sept 2026
+
+From `LCBT Quiz Feedback.pdf`. Applied except where noted.
+
+- **Landing headline** is now "FIND YOUR **DREAM** COURSE", DREAM in pink, and
+  the CTA is larger and capitalised.
+- **Type weights**: Gotham 700 for headings, 400 for body. Gotham ships
+  400/500/700/900, so the old 600 and 800 were silently rounding up — 800 was
+  rendering the headline in Ultra. Those are gone; only 400 and 700 are used.
+- **Age question** is "How old will you be when you start the course?", and the
+  funding-info subtitle is removed.
+- **Calculating** no longer names the interest — just "Calculating your
+  matches...".
+- **Percentages are gone.** A "96% match" implied a calculation precise enough
+  to justify the number and there wasn't one. Replaced with gold / silver /
+  bronze medals for first, second and third. Nothing past third carries one
+  rather than inventing a fourth tier. The labels — BEST MATCH, GREAT MATCH,
+  ALSO WORTH A LOOK — are mine, and live in `copy.json`.
+- **Share** now carries the client's line and shares **the quiz**, not the
+  course page: the point is to get the next person to take it.
+- **"Explore full details"** links to the matched course rather than the
+  generic listing.
+- **"See all courses" is no longer a card.** Removed from every deck — not just
+  the backfill I had added, but the "Explore all Level 2 courses" and "see all"
+  entries the spreadsheet itself put in decks, since the same objection
+  applies. The route to browse everything now sits on the results panel and on
+  the interest-fallback screen, so email capture still happens either way.
+  `explore-l2` / `explore-l3` are kept but marked unavailable, because the
+  client flagged this fallback design as unfinished.
+- **"Discover All Courses"** pink CTA added to the interest-fallback screen,
+  with the subtitle extended as asked.
+
+**Not done:** the decorative circles still need replacing with the 'smoosh'
+brand assets — waiting on those from the client.
+
 ## Where the live site overruled the spreadsheet
 
 Checked against lcbt.co.uk on 7 Sept 2026, reading each course's own page.

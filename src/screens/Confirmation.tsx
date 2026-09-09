@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Check, RotateCcw, Share2, Star } from "lucide-react";
+import { Check, Medal, RotateCcw, Share2 } from "lucide-react";
 import { copy, t } from "../content";
 import type { Course } from "../content/types";
-import { matchScore } from "../lib/matching";
+import { medalFor } from "../lib/matching";
 import { trackRestart, trackShare } from "../lib/analytics";
 import { CATEGORY_STYLE } from "../components/icons";
 
@@ -23,22 +23,27 @@ export function Confirmation({
   if (!headline) return null;
 
   const rank = Math.max(0, matched.findIndex((c) => c.id === headline.id));
-  const pct = matchScore(rank);
+  const medal = medalFor(rank);
   const cat = CATEGORY_STYLE[headline.category] ?? CATEGORY_STYLE.beauty;
   const Icon = cat.icon;
 
+  /**
+   * Shares the quiz, not the course page. The point of the message is to get
+   * the next person to take it; sending them to a course listing skips the
+   * thing being recommended.
+   */
   const share = async () => {
     const shareData = {
       title: copy.appName,
-      text: `My ${cat.label} match from LCBT: ${headline.title} (${pct}% match)`,
-      url: headline.url,
+      text: copy.confirmation.shareText,
+      url: window.location.origin,
     };
     try {
       if (navigator.share) {
         await navigator.share(shareData);
         trackShare(headline.id, "web-share");
       } else {
-        await navigator.clipboard.writeText(`${shareData.text} — ${shareData.url}`);
+        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
         setShared(true);
         trackShare(headline.id, "clipboard");
         window.setTimeout(() => setShared(false), 2200);
@@ -72,10 +77,12 @@ export function Confirmation({
           <Icon size={22} />
         </div>
         <div className="share-card__title">{headline.title}</div>
-        <div className="share-card__badge">
-          <Star size={11} fill="var(--gold)" color="var(--gold)" />
-          {t(copy.results.matchBadge, { pct })}
-        </div>
+        {medal && (
+          <div className="share-card__badge" data-medal={medal}>
+            <Medal size={12} />
+            {copy.results.medals[medal]}
+          </div>
+        )}
       </div>
 
       <button className="btn btn--ghost btn--sm" style={{ marginTop: 18 }} onClick={() => void share()}>
@@ -83,10 +90,11 @@ export function Confirmation({
         {shared ? copy.confirmation.shareCopied : copy.confirmation.shareCta}
       </button>
 
+      {/* Straight to the course they matched with, not the generic listing. */}
       <a
         className="btn btn--primary btn--sm"
         style={{ marginTop: 10 }}
-        href={copy.confirmation.exitUrl}
+        href={headline.url}
         target="_blank"
         rel="noreferrer"
       >

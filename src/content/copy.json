@@ -4,9 +4,9 @@
   "topBarTitle": "LCBT COURSE MATCH",
   "landing": {
     "eyebrow": "✨ LONDON'S NO.1 BEAUTY COLLEGE",
-    "headlineBefore": "Let's find the ",
-    "headlineHighlight": "course",
-    "headlineAfter": " for you.",
+    "headlineBefore": "FIND YOUR ",
+    "headlineHighlight": "DREAM",
+    "headlineAfter": " COURSE",
     "steps": [
       {
         "emoji": "👉",
@@ -21,7 +21,7 @@
         "text": "Get the details sent straight to you"
       }
     ],
-    "cta": "Find my course",
+    "cta": "FIND MY COURSE",
     "microCopy": "Takes about 30 seconds"
   },
   "vibe": {
@@ -33,16 +33,16 @@
     "resultBody": "Just the essentials left, then we'll calculate your matches properly.",
     "resultCta": "Continue",
     "fallbackHeadline": "Didn't love any of those?",
-    "fallbackSub": "No worries, just tap what excites you most."
+    "fallbackSub": "No worries, just tap what excites you most, or learn about all of our courses.",
+    "fallbackCta": "Discover All Courses",
+    "fallbackCtaUrl": "https://www.lcbt.co.uk/courses/"
   },
   "calculating": {
-    "message": "Calculating your {interest} matches...",
-    "messageGeneric": "Calculating your matches..."
+    "message": "Calculating your matches..."
   },
   "results": {
     "headline": "Your matches are in",
     "sub": "Swipe right to save, left to skip",
-    "matchBadge": "{pct}% MATCH",
     "reasoningPrefix": "Matched you",
     "stampRight": "LIKE",
     "stampLeft": "SKIP",
@@ -57,7 +57,14 @@
     "continueCta": "Continue",
     "noMatchHeadline": "Here's what we found",
     "noMatchSub": "Swipe or tap to continue",
-    "labelEntry": "Entry requirements"
+    "labelEntry": "Entry requirements",
+    "medals": {
+      "gold": "BEST MATCH",
+      "silver": "GREAT MATCH",
+      "bronze": "ALSO WORTH A LOOK"
+    },
+    "discoverCta": "Discover All Courses",
+    "discoverUrl": "https://www.lcbt.co.uk/courses/"
   },
   "email": {
     "headline": "Almost there",
@@ -77,8 +84,8 @@
     "shareCta": "Share my match",
     "shareCopied": "Link copied",
     "exitCta": "Explore full details on lcbt.co.uk",
-    "exitUrl": "https://www.lcbt.co.uk/courses/",
-    "restart": "Start again"
+    "restart": "Start again",
+    "shareText": "I found my dream course at LCBT. Why don't you find your dream course too?"
   },
   "goalClause": {
     "career": "A great foundation if you're ready to start working in the industry.",

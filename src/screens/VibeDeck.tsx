@@ -4,7 +4,11 @@ import { copy, t, interestPhrase, interests, questionNumber, vibeCards } from ".
 import type { InterestId, VibeCard } from "../content/types";
 import { computeInterest } from "../lib/matching";
 import { BEHIND_OFFSET, useSwipeDeck } from "../lib/useSwipeDeck";
-import { trackQuestionAnswered, trackQuestionView } from "../lib/analytics";
+import {
+  trackDiscoverAll,
+  trackQuestionAnswered,
+  trackQuestionView,
+} from "../lib/analytics";
 import { HeartBurst } from "../components/HeartBurst";
 import { useHeartBurst } from "../lib/useHeartBurst";
 import { VibeCardView } from "../components/Cards";
@@ -176,6 +180,18 @@ function VibeResult({
         justPicked={justPicked}
         onSelect={handle}
       />
+
+      {/* A way out for someone who doesn't want to pick a category at all. */}
+      <a
+        className="btn btn--primary"
+        style={{ marginTop: 20 }}
+        href={copy.vibe.fallbackCtaUrl}
+        target="_blank"
+        rel="noreferrer"
+        onClick={() => trackDiscoverAll("interest-fallback")}
+      >
+        {copy.vibe.fallbackCta}
+      </a>
     </div>
   );
 }

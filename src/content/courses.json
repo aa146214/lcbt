@@ -1,5 +1,5 @@
 {
-  "_source": "Verified against the individual course pages at lcbt.co.uk on 7 Sept 2026. Every live course's blurb, duration, start date, entry requirements and funding is quoted from its own course page. Start dates go stale - the year-long courses read September 2027 and the Level 4 reads September 2026.",
+  "_source": "Verified against the individual course pages at lcbt.co.uk on 7 Sept 2026. Every live course's blurb, duration, start date, entry requirements and funding is quoted from its own course page. Start dates go stale - the year-long courses read September 2027 and the Level 4 reads September 2026. explore-l2 / explore-l3 are marked unavailable: client feedback (9 Sept 2026) was that 'see all courses' should not be a swipeable card. Kept rather than deleted because the client flagged the fallback design as unfinished - flip available and re-add to matching.json to bring them back.",
   "l2-beauty": {
     "id": "l2-beauty",
     "kind": "course",
@@ -170,7 +170,8 @@
     },
     "url": "https://www.lcbt.co.uk/courses/",
     "startDate": null,
-    "source": "not a live catalogue entry"
+    "source": "not a live catalogue entry",
+    "available": false
   },
   "explore-l3": {
     "id": "explore-l3",
@@ -186,7 +187,8 @@
     "funding": "Fully funded for 16-18; fees apply for 19+ (loans available)",
     "url": "https://www.lcbt.co.uk/courses/",
     "startDate": null,
-    "source": "not a live catalogue entry"
+    "source": "not a live catalogue entry",
+    "available": false
   },
   "register-interest": {
     "id": "register-interest",

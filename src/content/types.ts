@@ -73,15 +73,10 @@ export interface MatchRule {
     shortCoursesAvailable?: boolean;
   };
   type?: "courses" | "registerInterest";
-  /** "See all" card appended when this rule's deck comes out too thin. */
-  backfill?: string;
   results: Record<InterestId, string[]>;
 }
 
 export interface MatchingTable {
-  matchScores: number[];
-  /** Decks below this many cards get their rule's `backfill` appended. */
-  minDeckSize: number;
   rules: MatchRule[];
   fallback: { type: "registerInterest"; ids: string[] };
 }

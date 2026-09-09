@@ -151,15 +151,22 @@ export function trackQuestionAnswered(questionId: string, answerValue: string) {
   });
 }
 
-/** 4. Results screen shown. `score` is the top match percentage. */
-export function trackQuizComplete(score: number, matchedCourseIds: string[]) {
+/**
+ * 4. Results screen shown.
+ *
+ * The plan's `score` was the top match percentage. Percentages are gone — they
+ * implied a precision the matching never had — so this reports how many
+ * courses the person was matched with instead, which is the number that
+ * actually varies and is worth reporting on.
+ */
+export function trackQuizComplete(matchedCourseIds: string[]) {
   if (firedOnce.has("complete")) return;
   firedOnce.add("complete");
   const completionTime = quizStartedAt
     ? Math.round((Date.now() - quizStartedAt) / 100) / 10
     : 0;
   push("quiz_complete", {
-    score,
+    score: matchedCourseIds.length,
     total_questions: totalQuestions,
     completion_time: completionTime,
     matched_courses: matchedCourseIds.join(","),
@@ -189,6 +196,11 @@ export function trackEmailSubmitted(savedCount: number, marketingConsent: boolea
 
 export function trackShare(courseId: string, method: string) {
   push("quiz_share", { course_id: courseId, method });
+}
+
+/** Someone chose to browse the full catalogue instead of taking a match. */
+export function trackDiscoverAll(from: string) {
+  push("quiz_discover_all", { from });
 }
 
 export function trackRestart() {

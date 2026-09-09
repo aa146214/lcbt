@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from "react";
-import { interestPhrase } from "./content";
 import type { Answers, Course, InterestId, MatchResult, StepKey } from "./content/types";
 import { getMatches, getSteps, pruneAnswers, vibeCardCount } from "./lib/matching";
 import { setProfile, setTotalQuestions, trackQuizStart } from "./lib/analytics";
@@ -117,10 +116,7 @@ export default function App() {
       )}
 
       {screen === "calculating" && (
-        <Calculating
-          interestLabel={interestPhrase(answers.interest)}
-          onDone={() => setScreen("results")}
-        />
+        <Calculating onDone={() => setScreen("results")} />
       )}
 
       {screen === "results" && matches && (

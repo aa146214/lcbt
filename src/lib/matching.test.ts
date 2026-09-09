@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   computeInterest,
   fundingFor,
+  medalFor,
   getMatches,
   getPriorLevel,
   getSteps,
@@ -82,9 +83,9 @@ describe("getSteps — question gating", () => {
 
 describe("sheet rows 29-36 — 16-18 who already hold a Level 2", () => {
   const cases: [InterestId, string[]][] = [
-    ["beauty", ["l3-beauty", "explore-l3"]],
-    ["hair", ["l3-hair", "explore-l3"]],
-    ["makeup", ["l3-mua", "explore-l3"]],
+    ["beauty", ["l3-beauty"]],
+    ["hair", ["l3-hair"]],
+    ["makeup", ["l3-mua"]],
     ["all", ["l3-mua", "l3-beauty", "l3-hair"]],
   ];
 
@@ -124,7 +125,7 @@ describe("pruneAnswers — going back and changing an answer", () => {
 
 describe("sheet rows 18-27 — 16-18, no previous qualification, recommend Level 2", () => {
   const cases: [InterestId, string[]][] = [
-    ["beauty", ["l2-beauty", "l2-mua", "explore-l2"]],
+    ["beauty", ["l2-beauty", "l2-mua"]],
     ["hair", ["l2-hair", "l2-mua", "l2-beauty"]],
     ["makeup", ["l2-mua", "l2-beauty", "l2-hair"]],
     ["all", ["l2-mua", "l2-beauty", "l2-hair"]],
@@ -151,7 +152,7 @@ describe("sheet rows 56-62 — 19+ holding a Level 2, no short courses", () => {
   // Resolves to the shared Level 3 diplomas: the live catalogue has one per
   // subject open to both age groups, not separate 19+ courses.
   const cases: [InterestId, string[]][] = [
-    ["beauty", ["l3-beauty", "explore-l3"]],
+    ["beauty", ["l3-beauty"]],
     ["hair", ["l3-hair", "l3-mua"]],
     ["makeup", ["l3-mua", "l3-hair"]],
     ["all", ["l3-beauty", "l3-hair"]],
@@ -163,13 +164,13 @@ describe("sheet rows 56-62 — 19+ holding a Level 2, no short courses", () => {
 });
 
 describe("sheet rows 66-72 — 19+ holding a Level 3", () => {
-  // Short courses are dropped as unavailable, so each of these would come out
-  // as a single card; the rule's "see all" backfill tops it back up.
+  // Short courses are dropped as unavailable, so these come out short. That is
+  // fine: browsing everything is offered on the results panel, not as a card.
   const cases: [InterestId, string[]][] = [
-    ["beauty", ["l4-aesthetic", "explore-l3"]],
-    ["hair", ["l3-mua", "explore-l3"]],
-    ["makeup", ["l3-hair", "explore-l3"]],
-    ["all", ["l4-aesthetic", "explore-l3"]],
+    ["beauty", ["l4-aesthetic"]],
+    ["hair", ["l3-mua"]],
+    ["makeup", ["l3-hair"]],
+    ["all", ["l4-aesthetic"]],
   ];
 
   it.each(cases)("%s", (interest, expected) => {
@@ -177,37 +178,44 @@ describe("sheet rows 66-72 — 19+ holding a Level 3", () => {
   });
 });
 
-describe("thin decks get a route onwards", () => {
-  it("tops up a deck left with one card after filtering", () => {
-    // 19+ / Level 2 / beauty is just L3 Beauty Therapy once short courses go.
-    expect(ids({ interest: "beauty", age: "19+", priorQual: "yes", level: "Level 2" })).toEqual([
-      "l3-beauty",
-      "explore-l3",
-    ]);
-  });
-
-  it("leaves decks that are already big enough alone", () => {
-    expect(ids({ interest: "hair", age: "16-18" })).toEqual(["l2-hair", "l2-mua", "l2-beauty"]);
-  });
-
-  it("never backfills the register-interest path", () => {
-    const result = getMatches({ interest: "hair", age: "19+", priorQual: "no" });
-    expect(result.courses.map((c) => c.id)).toEqual(["register-interest"]);
-  });
-
-  it("never leaves anyone with a single card and nowhere to go", () => {
+describe("no 'see all' card inside a deck", () => {
+  // Client feedback, 9 Sept 2026: browsing the full catalogue should not be a
+  // swipeable card. The route to it lives on the results panel instead.
+  it("never puts a collection card in front of anyone", () => {
     for (const age of ["16-18", "19+"] as const) {
       for (const interest of ["beauty", "hair", "makeup", "all"] as InterestId[]) {
-        for (const level of ["Level 2", "Level 3"] as const) {
-          const result = getMatches({ interest, age, priorQual: "yes", level });
-          if (result.type === "registerInterest") continue;
-          expect(
-            result.courses.length,
-            `${age}/${interest}/${level} deck too thin`,
-          ).toBeGreaterThanOrEqual(2);
+        for (const priorQual of ["yes", "no"] as const) {
+          for (const level of ["Level 2", "Level 3", "notsure"] as const) {
+            const deck = getMatches({ interest, age, priorQual, level }).courses;
+            expect(
+              deck.filter((c) => c.kind === "collection"),
+              `${age}/${interest}/${priorQual}/${level}`,
+            ).toEqual([]);
+          }
         }
       }
     }
+  });
+
+  it("still gives everyone at least one card", () => {
+    for (const age of ["16-18", "19+"] as const) {
+      for (const interest of ["beauty", "hair", "makeup", "all"] as InterestId[]) {
+        expect(getMatches({ interest, age }).courses.length).toBeGreaterThan(0);
+      }
+    }
+  });
+});
+
+describe("medals replace the match percentage", () => {
+  it("ranks the first three and stops", () => {
+    expect(medalFor(0)).toBe("gold");
+    expect(medalFor(1)).toBe("silver");
+    expect(medalFor(2)).toBe("bronze");
+  });
+
+  it("invents no fourth tier", () => {
+    expect(medalFor(3)).toBeNull();
+    expect(medalFor(99)).toBeNull();
   });
 });
 

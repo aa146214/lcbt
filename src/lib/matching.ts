@@ -158,20 +158,6 @@ export function getMatches(answers: Answers): MatchResult {
     };
   }
 
-  // Taking short courses out of the catalogue collapsed some decks to a single
-  // card, which undercuts the sheet's whole approach to prior qualifications:
-  // offer a plausible set and let people self-select against the entry
-  // requirements (logic!F36, "until we know which level 2 they hold"). Top a
-  // thin deck back up with the rule's "see all" card so there is still
-  // somewhere to go.
-  const backfillId = rule?.backfill;
-  if (backfillId && resolved.length < matching.minDeckSize) {
-    const extra = courses[backfillId];
-    if (extra && extra.available !== false && !resolved.some((c) => c.id === extra.id)) {
-      resolved.push(extra);
-    }
-  }
-
   const type =
     rule?.type ??
     (resolved.every((c) => c.kind === "register-interest")
@@ -192,8 +178,18 @@ export function fundingFor(course: Course, age?: AgeId): string {
   return course.funding;
 }
 
-/** Descending match score by rank, extending the last value if the list runs long. */
-export function matchScore(rank: number): number {
-  const scores = matching.matchScores;
-  return scores[rank] ?? scores[scores.length - 1];
+export type Medal = "gold" | "silver" | "bronze";
+
+const MEDALS: Medal[] = ["gold", "silver", "bronze"];
+
+/**
+ * The rank badge for a card's position in the deck.
+ *
+ * Replaces the old percentage. A "96% match" implies a calculation precise
+ * enough to justify the number, and there isn't one — the deck is an ordered
+ * list, so an ordinal medal says exactly as much as we actually know. Anything
+ * past third place carries no medal rather than inventing a fourth tier.
+ */
+export function medalFor(rank: number): Medal | null {
+  return MEDALS[rank] ?? null;
 }

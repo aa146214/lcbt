@@ -84,8 +84,8 @@
     {
       "id": "age",
       "layout": "grid",
-      "question": "How old are you?",
-      "sub": "Just so we show you the right funding info.",
+      "question": "How old will you be when you start the course?",
+      "sub": null,
       "reassurance": "Nice one.",
       "options": [
         {

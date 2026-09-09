@@ -21,6 +21,10 @@
   --border: #e5dae3;
   --grey: #9c8a98;
 
+  --medal-gold: #c98a1f;
+  --medal-silver: #8e8a95;
+  --medal-bronze: #a4703f;
+
   --cat-hair: var(--pink);
   --cat-beauty: var(--gold);
   --cat-makeup: var(--plum);

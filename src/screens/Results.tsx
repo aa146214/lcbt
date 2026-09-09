@@ -2,10 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Heart, X } from "lucide-react";
 import { copy, t } from "../content";
 import type { Answers, Course, MatchResult } from "../content/types";
-import { matchScore } from "../lib/matching";
+import { medalFor } from "../lib/matching";
 import { buildReasoning } from "../lib/reasoning";
 import { BEHIND_OFFSET, useSwipeDeck } from "../lib/useSwipeDeck";
-import { trackCourseSwipe, trackQuizComplete } from "../lib/analytics";
+import {
+  trackCourseSwipe,
+  trackDiscoverAll,
+  trackQuizComplete,
+} from "../lib/analytics";
 import { HeartBurst } from "../components/HeartBurst";
 import { useHeartBurst } from "../lib/useHeartBurst";
 import { CourseCard } from "../components/Cards";
@@ -31,10 +35,7 @@ export function Results({
   const { bursts, glows, fire } = useHeartBurst();
 
   useEffect(() => {
-    trackQuizComplete(
-      matchScore(0),
-      cards.map((c) => c.id),
-    );
+    trackQuizComplete(cards.map((c) => c.id));
     // The results reveal is the completion beat the tracking plan measures.
     // trackQuizComplete only fires once per run, so a re-render is harmless.
   }, [cards]);
@@ -83,7 +84,7 @@ export function Results({
               <CourseCard
                 key={course.id}
                 course={course}
-                matchPct={matchScore(i)}
+                medal={medalFor(i)}
                 isTop={isTop}
                 offset={isTop ? offset : BEHIND_OFFSET}
                 rotation={isTop ? rotation : 0}
@@ -154,6 +155,18 @@ function FinishedPanel({
       <button className="btn btn--primary" style={{ marginTop: 6 }} onClick={onFinish}>
         {copy.results.continueCta} <ArrowRight size={16} />
       </button>
+
+      {/* Browsing everything is a route out of the deck, not a card inside it.
+          Continue above still leads to email capture either way. */}
+      <a
+        className="btn--plain"
+        href={copy.results.discoverUrl}
+        target="_blank"
+        rel="noreferrer"
+        onClick={() => trackDiscoverAll("results")}
+      >
+        {copy.results.discoverCta}
+      </a>
     </div>
   );
 }

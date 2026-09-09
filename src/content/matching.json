@@ -1,11 +1,5 @@
 {
-  "_source": "LCBT course finder logic v1.xlsx - sheet 'logic', rows 18-72, reconciled against the live catalogue at lcbt.co.uk/courses (7 Sept 2026). The sheet's hidden rows 11-13 define separate '19+ Level 3' courses that do not exist on the live site: there is one Level 3 diploma per subject, open to both age groups with different funding. The 19+ rules below therefore resolve to l3-* rather than to separate 19+ course records. Rules are evaluated top to bottom; the first whose `when` clause matches wins.",
-  "matchScores": [
-    96,
-    84,
-    71,
-    64
-  ],
+  "_source": "LCBT course finder logic v1.xlsx - sheet 'logic', rows 18-72, reconciled against the live catalogue at lcbt.co.uk/courses (7 Sept 2026). The sheet's hidden rows 11-13 define separate '19+ Level 3' courses that do not exist on the live site: there is one Level 3 diploma per subject, open to both age groups with different funding. The 19+ rules below therefore resolve to l3-* rather than to separate 19+ course records. Rules are evaluated top to bottom; the first whose `when` clause matches wins. Decks are no longer topped up with a 'see all' card: client feedback (LCBT Quiz Feedback, 9 Sept 2026) was that browsing all courses should not be a swipeable card. The route out now sits on the results panel instead.",
   "rules": [
     {
       "id": "16-18-no-prior",
@@ -20,8 +14,7 @@
       "results": {
         "beauty": [
           "l2-beauty",
-          "l2-mua",
-          "explore-l2"
+          "l2-mua"
         ],
         "hair": [
           "l2-hair",
@@ -38,8 +31,7 @@
           "l2-beauty",
           "l2-hair"
         ]
-      },
-      "backfill": "explore-l2"
+      }
     },
     {
       "id": "16-18-level2",
@@ -53,24 +45,20 @@
       },
       "results": {
         "beauty": [
-          "l3-beauty",
-          "explore-l3"
+          "l3-beauty"
         ],
         "hair": [
-          "l3-hair",
-          "explore-l3"
+          "l3-hair"
         ],
         "makeup": [
-          "l3-mua",
-          "explore-l3"
+          "l3-mua"
         ],
         "all": [
           "l3-mua",
           "l3-beauty",
           "l3-hair"
         ]
-      },
-      "backfill": "explore-l3"
+      }
     },
     {
       "id": "19-plus-no-prior-short-courses",
@@ -152,8 +140,7 @@
           "l3-hair",
           "short-courses"
         ]
-      },
-      "backfill": "explore-l3"
+      }
     },
     {
       "id": "19-plus-level2-no-short-courses",
@@ -179,8 +166,7 @@
           "l3-beauty",
           "l3-hair"
         ]
-      },
-      "backfill": "explore-l3"
+      }
     },
     {
       "id": "19-plus-level3",
@@ -206,8 +192,7 @@
           "l4-aesthetic",
           "short-courses"
         ]
-      },
-      "backfill": "explore-l3"
+      }
     },
     {
       "id": "19-plus-level-not-confirmed",
@@ -238,6 +223,5 @@
     "ids": [
       "register-interest"
     ]
-  },
-  "minDeckSize": 2
+  }
 }
