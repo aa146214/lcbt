@@ -35,7 +35,10 @@
     "fallbackHeadline": "Didn't love any of those?",
     "fallbackSub": "No worries, just tap what excites you most, or learn about all of our courses.",
     "fallbackCta": "Discover All Courses",
-    "fallbackCtaUrl": "https://www.lcbt.co.uk/courses/"
+    "fallbackCtaUrl": "https://www.lcbt.co.uk/courses/",
+    "resultHeadlineByInterest": {
+      "all": "Got your vibe. Loving all of it."
+    }
   },
   "calculating": {
     "message": "Calculating your matches..."

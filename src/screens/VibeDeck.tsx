@@ -139,7 +139,8 @@ function VibeResult({
           <Icon size={26} color={style.color} />
         </div>
         <h2 className="h3">
-          {t(copy.vibe.resultHeadline, { interest: phrase })}
+          {(copy.vibe.resultHeadlineByInterest as Record<string, string>)[computed] ??
+            t(copy.vibe.resultHeadline, { interest: phrase })}
         </h2>
         <p className="sub" style={{ maxWidth: 280 }}>
           {copy.vibe.resultBody}
