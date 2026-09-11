@@ -48,13 +48,36 @@ button { font-family: inherit; }
   }
 }
 
+/* The artwork lives on the shell rather than any one screen, so it carries
+   through the whole journey. It is full-bleed and sized to the shell's own
+   aspect, so the marks land where they were composed to. Held back to a
+   watermark: at full strength the brush is the same pink as DREAM in the
+   headline and as the CTA, and it fights both. */
+.app-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/smoosh.png") center / cover no-repeat;
+  opacity: 0.16;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .screen {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  background: var(--bg);
+  /* Transparent so the shell's artwork shows through. */
+  background: transparent;
+  position: relative;
+  z-index: 1;
 }
+
+/* Chrome above the artwork too, or it floats behind the top bar. */
+.topbar,
+.progress,
+.chips { position: relative; z-index: 1; }
 
 .screen--pad { padding: 20px; }
 .screen--scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; }
@@ -288,7 +311,10 @@ button { font-family: inherit; }
   overflow: hidden;
   background: var(--bg);
   border: 1px solid var(--border);
-  touch-action: none;
+  /* pan-y, not none: the details inside the card scroll vertically, and the
+     hook claims horizontal gestures itself. `none` would kill the scroll;
+     leaving it unset lets the browser steal the swipe. */
+  touch-action: pan-y;
   display: flex;
   flex-direction: column;
   user-select: none;
@@ -407,6 +433,9 @@ button { font-family: inherit; }
   flex-direction: column;
   min-height: 0;
   overflow-y: auto;
+  touch-action: pan-y;
+  /* Don't let a scroll that reaches the end carry on into the page behind. */
+  overscroll-behavior: contain;
 }
 .course-card__reason {
   margin-top: 10px;
@@ -568,17 +597,7 @@ button { font-family: inherit; }
   position: relative;
   overflow: hidden;
 }
-/* The artwork is full-bleed and sized to the shell's own aspect, so the marks
-   land where they were composed to. Held back to a watermark: at full strength
-   the brush is the same pink as DREAM in the headline and as the CTA, and it
-   fights both. */
-.landing__smoosh {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: url("/smoosh.png") center / cover no-repeat;
-  opacity: 0.16;
-}
+
 .landing__badge {
   display: inline-flex;
   align-items: center;

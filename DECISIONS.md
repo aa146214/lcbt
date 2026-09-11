@@ -42,8 +42,9 @@ From `LCBT Quiz Feedback.pdf`. Applied except where noted.
 **Smoosh assets, received 11 Sept.** `public/smoosh.png` is a single 9:16
 composition, not a set of separate marks: an asterisk top right, a spiral off
 the left edge, another asterisk bottom right, and a deliberately empty middle
-column. So it goes in full-bleed behind the landing content rather than being
-placed mark by mark, and the two circles are gone.
+column. So it goes in full-bleed rather than being placed mark by mark, and the
+two circles are gone. It sits on `.app-shell::before` so it carries through
+every screen, with `.screen` transparent over it.
 
 Held at 16% opacity. At full strength the brush is the same pink as DREAM in
 the headline and as the CTA, and it competes with both — `.landing__smoosh` in
@@ -54,6 +55,27 @@ new brush marks — the star on the top-right asterisk, the heart on the
 bottom-right one. They were prototype stand-ins for brand decoration, and the
 brand decoration has now arrived. Not something the feedback asked for, so if
 they are wanted back it is a few lines in `Landing.tsx`.
+
+## Swipe vs scroll on touch devices
+
+Reported 11 Sept: cards could not be swiped on Android, though they were fine
+in a desktop browser.
+
+The card body is an `overflow-y: auto` scroll container. `.card` carried
+`touch-action: none`, but the body had none of its own, so on a touchscreen the
+browser claimed a drag starting inside it for scrolling and fired
+`pointercancel` — which reset the card mid-swipe. A mouse never goes through
+that arbitration, which is exactly why desktop looked fine.
+
+Two halves to the fix:
+
+- `touch-action: pan-y` on both the card and its body. `none` would have killed
+  the scroll; leaving it unset let the browser steal the swipe.
+- The deck now decides, on the first 8px of movement, whether a gesture is a
+  swipe or a scroll. Horizontal gestures it claims (taking pointer capture only
+  at that point, since capturing on touch-down suppresses scrolling); vertical
+  ones it releases entirely. Vertical movement during a swipe is damped rather
+  than followed, so the card stops chasing the finger downward.
 
 ## Where the live site overruled the spreadsheet
 

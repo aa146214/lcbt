@@ -6,11 +6,6 @@ export function Landing({ onStart }: { onStart: () => void }) {
 
   return (
     <div className="screen landing">
-      {/* LCBT's 'smoosh' brush marks. One 9:16 composition, deliberately empty
-          down the middle, so it sits full-bleed behind the content rather than
-          being placed mark by mark. */}
-      <div className="landing__smoosh" aria-hidden="true" />
-
 
       <div style={{ position: "relative" }}>
         <div className="landing__badge">{c.eyebrow}</div>

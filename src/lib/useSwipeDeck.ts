@@ -32,6 +32,9 @@ const FLY_MS = 300;
 /** How long the card behind takes to settle into the top slot. */
 const PROMOTE_MS = 340;
 
+/** Movement before we decide whether a gesture is a swipe or a scroll. */
+const AXIS_SLOP = 8;
+
 interface Options<T> {
   items: T[];
   /** Distance in px past which releasing commits the swipe. */
@@ -61,7 +64,13 @@ export function useSwipeDeck<T>({
 }: Options<T>) {
   const [index, setIndex] = useState(0);
   const [offset, setOffset] = useState<DeckOffset>(REST);
-  const drag = useRef({ startX: 0, startY: 0, dragging: false, moved: 0 });
+  const drag = useRef<{
+    startX: number;
+    startY: number;
+    dragging: boolean;
+    moved: number;
+    axis: "x" | "y" | null;
+  }>({ startX: 0, startY: 0, dragging: false, moved: 0, axis: null });
   const offsetRef = useRef<DeckOffset>(REST);
   const busy = useRef(false);
 
@@ -106,20 +115,48 @@ export function useSwipeDeck<T>({
   const dragHandlers = {
     onPointerDown: (e: React.PointerEvent) => {
       if (busy.current) return;
-      // Record the gesture BEFORE attempting capture. setPointerCapture throws
-      // if the id is no longer an active pointer (it happens with rapid
-      // multi-touch), and a throw here used to kill the whole drag. Capture is
-      // an enhancement — it keeps a drag alive past the edge of the card — so
-      // losing it must not cost us the gesture itself.
-      drag.current = { startX: e.clientX, startY: e.clientY, dragging: true, moved: 0 };
-      capture(e, "set");
+      // Capture is deliberately NOT taken here. Grabbing the pointer on touch-
+      // down suppresses the browser's own scrolling, and the card body is a
+      // scroll container — so we wait until we know the gesture is horizontal
+      // and only then claim it.
+      drag.current = {
+        startX: e.clientX,
+        startY: e.clientY,
+        dragging: true,
+        moved: 0,
+        axis: null,
+      };
     },
     onPointerMove: (e: React.PointerEvent) => {
       if (!drag.current.dragging) return;
       const dx = e.clientX - drag.current.startX;
       const dy = e.clientY - drag.current.startY;
-      drag.current.moved = Math.abs(dx) + Math.abs(dy);
-      setOffsetBoth({ x: dx, y: dy, animating: false });
+      const adx = Math.abs(dx);
+      const ady = Math.abs(dy);
+
+      /* Decide once, on the first few pixels, whether this is a swipe or a
+         scroll of the details inside the card. Without this the two fight:
+         on a touchscreen the browser claims a downward drag for scrolling and
+         cancels our pointer mid-swipe, so the card snaps back and the person
+         can't get past it. Desktop never showed it because a mouse doesn't go
+         through the same arbitration. */
+      if (drag.current.axis === null) {
+        if (adx + ady < AXIS_SLOP) return;
+        drag.current.axis = adx > ady ? "x" : "y";
+        if (drag.current.axis === "y") {
+          // Theirs. Let go entirely so the card body scrolls normally.
+          drag.current.dragging = false;
+          setOffsetBoth(REST);
+          return;
+        }
+        capture(e, "set");
+      }
+
+      drag.current.moved = adx + ady;
+      // Vertical movement is damped rather than followed: the finger is
+      // travelling sideways, and letting the card chase dy reintroduces the
+      // fight with scrolling.
+      setOffsetBoth({ x: dx, y: dy * 0.18, animating: false });
     },
     onPointerUp: (e: React.PointerEvent) => {
       if (!drag.current.dragging) return;
@@ -127,7 +164,7 @@ export function useSwipeDeck<T>({
       drag.current.dragging = false;
       const dx = offsetRef.current.x;
 
-      if (drag.current.moved < tapSlop) {
+      if (drag.current.axis === null || drag.current.moved < tapSlop) {
         setOffsetBoth({ ...REST, animating: true });
         onTap?.(items[index], index);
         return;
@@ -138,6 +175,7 @@ export function useSwipeDeck<T>({
     },
     onPointerCancel: () => {
       drag.current.dragging = false;
+      drag.current.axis = null;
       setOffsetBoth({ ...REST, animating: true });
     },
   };
