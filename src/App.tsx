@@ -1,7 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 import type { Answers, Course, InterestId, MatchResult, StepKey } from "./content/types";
 import { getMatches, getSteps, pruneAnswers, vibeCardCount } from "./lib/matching";
-import { setProfile, setTotalQuestions, trackQuizStart } from "./lib/analytics";
+import {
+  setProfile,
+  setTotalQuestions,
+  trackQuizComplete,
+  trackQuizStart,
+} from "./lib/analytics";
 import { ProfileStrip, ProgressBar, TopBar } from "./components/Chrome";
 import { Landing } from "./screens/Landing";
 import { VibeDeck } from "./screens/VibeDeck";
@@ -116,7 +121,18 @@ export default function App() {
       )}
 
       {screen === "calculating" && (
-        <Calculating onDone={() => setScreen("results")} />
+        <Calculating
+          onDone={() => {
+            // Fired here rather than on the results screen, because a
+            // register-interest run never reaches one — measuring completion
+            // there would drop that whole segment out of the funnel.
+            if (matches) trackQuizComplete(matches.courses.map((c) => c.id));
+
+            // Nothing to match them with: skip the deck entirely rather than
+            // making someone swipe a single card that isn't a course.
+            setScreen(matches?.type === "registerInterest" ? "email" : "results");
+          }}
+        />
       )}
 
       {screen === "results" && matches && (
@@ -135,18 +151,35 @@ export default function App() {
 
       {screen === "email" && matches && (
         <>
-          <TopBar onBack={() => setScreen("results")} />
+          <TopBar
+            onBack={() => {
+              // There is no deck behind this one on the register-interest
+              // path, so back goes to the question that sent them here.
+              if (matches.type === "registerInterest") {
+                setStepIndex(Math.max(0, steps.length - 1));
+                setScreen("quiz");
+              } else {
+                setScreen("results");
+              }
+            }}
+          />
           <EmailCapture
             saved={saved}
             matched={matches.courses}
             answers={answers}
+            registerInterest={matches.type === "registerInterest"}
             onDone={() => setScreen("confirmation")}
           />
         </>
       )}
 
       {screen === "confirmation" && matches && (
-        <Confirmation saved={saved} matched={matches.courses} onRestart={restart} />
+        <Confirmation
+          saved={saved}
+          matched={matches.courses}
+          registerInterest={matches.type === "registerInterest"}
+          onRestart={restart}
+        />
       )}
     </main>
   );

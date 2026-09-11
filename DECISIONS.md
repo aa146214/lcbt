@@ -56,6 +56,26 @@ bottom-right one. They were prototype stand-ins for brand decoration, and the
 brand decoration has now arrived. Not something the feedback asked for, so if
 they are wanted back it is a few lines in `Landing.tsx`.
 
+## No deck when there is nothing to match
+
+19+ with no prior qualification goes straight from the loading screen to email
+capture, carrying the register-interest card's own words, rather than swiping a
+single card that isn't a course. Client request, 11 Sept.
+
+Three things had to follow it:
+
+- **`quiz_complete` moved out of the results screen** and into the loading
+  screen's completion. Measuring completion on a screen this segment never sees
+  would have quietly dropped them out of the funnel entirely.
+- **Confirmation has its own variant.** There is no matched course, so there is
+  no card to screenshot and no course page to link to — it confirms the
+  registration and points at the full catalogue instead of inventing a match.
+- **Back goes to the last question**, not to a deck that was never rendered, so
+  someone who answered "no" by mistake can correct it.
+
+The lead now carries `leadType: "registration" | "matches"` so the CRM can
+route the two without inferring it from course ids.
+
 ## Swipe vs scroll on touch devices
 
 Reported 11 Sept: cards could not be swiped on Android, though they were fine

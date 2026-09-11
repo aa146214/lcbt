@@ -9,13 +9,53 @@ import { CATEGORY_STYLE } from "../components/icons";
 export function Confirmation({
   saved,
   matched,
+  registerInterest,
   onRestart,
 }: {
   saved: Course[];
   matched: Course[];
+  registerInterest: boolean;
   onRestart: () => void;
 }) {
   const [shared, setShared] = useState(false);
+
+  /* Nothing was matched, so there is no card to screenshot and no course page
+     to send them to. Confirm the registration and point at the full
+     catalogue instead of inventing a match. */
+  if (registerInterest) {
+    return (
+      <div className="screen screen--scroll" style={{ padding: "26px 22px", alignItems: "center" }}>
+        <div className="panel__icon" style={{ width: 54, height: 54, marginBottom: 14 }}>
+          <Check size={24} color="var(--pink)" />
+        </div>
+        <h2 className="h2" style={{ fontSize: 19, margin: 0, textAlign: "center" }}>
+          {copy.confirmation.registerInterest.headline}
+        </h2>
+        <p className="sub" style={{ marginTop: 6, textAlign: "center", fontSize: 13 }}>
+          {copy.confirmation.registerInterest.sub}
+        </p>
+        <a
+          className="btn btn--primary btn--sm"
+          style={{ marginTop: 22 }}
+          href={copy.results.discoverUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {copy.results.discoverCta}
+        </a>
+        <button
+          className="btn--plain"
+          style={{ marginTop: 14 }}
+          onClick={() => {
+            trackRestart();
+            onRestart();
+          }}
+        >
+          <RotateCcw size={13} /> {copy.confirmation.restart}
+        </button>
+      </div>
+    );
+  }
 
   // Their own first pick if they saved one, otherwise the top match — the
   // empty-state copy on the results screen promises exactly this.

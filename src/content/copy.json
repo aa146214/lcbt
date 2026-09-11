@@ -78,7 +78,9 @@
     "smallPrint": "We'll use your email to send the course matches you asked for. Marketing is opt-in and you can unsubscribe at any time.",
     "errorInvalid": "That doesn't look like a valid email address.",
     "errorSend": "Something went wrong sending your matches. Please try again.",
-    "consentLabel": "Email me about open days, new courses and offers at LCBT."
+    "consentLabel": "Email me about open days, new courses and offers at LCBT.",
+    "ctaRegister": "Register my interest",
+    "smallPrintRegister": "We'll only use your email to let you know when something suitable opens up. Marketing is opt-in and you can unsubscribe at any time."
   },
   "confirmation": {
     "headline": "Check your inbox!",
@@ -88,7 +90,11 @@
     "shareCopied": "Link copied",
     "exitCta": "Explore full details on lcbt.co.uk",
     "restart": "Start again",
-    "shareText": "I found my dream course at LCBT. Why don't you find your dream course too?"
+    "shareText": "I found my dream course at LCBT. Why don't you find your dream course too?",
+    "registerInterest": {
+      "headline": "You're on the list",
+      "sub": "We'll email you the moment something suitable opens up. In the meantime, here's everything we run right now."
+    }
   },
   "goalClause": {
     "career": "A great foundation if you're ready to start working in the industry.",

@@ -11,11 +11,19 @@ export function EmailCapture({
   saved,
   matched,
   answers,
+  registerInterest,
   onDone,
 }: {
   saved: Course[];
   matched: Course[];
   answers: Answers;
+  /**
+   * True when we had nothing to match this person with. The deck is skipped
+   * entirely in that case, so this screen carries the card's own words rather
+   * than making someone swipe a single card that isn't a course.
+   */
+  registerInterest: boolean;
+  answersOnly?: never;
   onDone: () => void;
 }) {
   const [email, setEmail] = useState("");
@@ -32,7 +40,14 @@ export function EmailCapture({
     if (!valid || status === "sending") return;
     setStatus("sending");
     try {
-      await submitLead({ email, answers, saved, matched, marketingConsent: consent });
+      await submitLead({
+        email,
+        answers,
+        saved,
+        matched,
+        marketingConsent: consent,
+        leadType: registerInterest ? "registration" : "matches",
+      });
       trackEmailSubmitted(saved.length, consent);
       onDone();
     } catch (err) {
@@ -59,13 +74,13 @@ export function EmailCapture({
         </div>
 
         <h2 className="h2" style={{ fontSize: 20, margin: 0 }}>
-          {copy.email.headline}
+          {registerInterest ? matched[0]?.title : copy.email.headline}
         </h2>
         <p className="sub" style={{ marginTop: 8 }}>
-          {copy.email.sub}
+          {registerInterest ? matched[0]?.blurb : copy.email.sub}
         </p>
 
-        {saved.length > 0 && (
+        {!registerInterest && saved.length > 0 && (
           <div className="saved-list">
             {saved.map((course) => (
               <div className="saved-item" key={course.id}>
@@ -120,9 +135,15 @@ export function EmailCapture({
         disabled={!valid || status === "sending"}
         style={{ marginTop: 20 }}
       >
-        {status === "sending" ? copy.email.sending : copy.email.cta}
+        {status === "sending"
+          ? copy.email.sending
+          : registerInterest
+            ? copy.email.ctaRegister
+            : copy.email.cta}
       </button>
-      <p className="small-print">{copy.email.smallPrint}</p>
+      <p className="small-print">
+        {registerInterest ? copy.email.smallPrintRegister : copy.email.smallPrint}
+      </p>
     </form>
   );
 }

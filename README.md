@@ -95,6 +95,7 @@ Note `answer_value` rather than the plan's `is_correct`, and see
   "savedCourseIds": ["l3-hair"],
   "matchedCourseIds": ["l3-hair", "explore-l3"],
   "marketingConsent": false,
+  "leadType": "matches",
   "submittedAt": "2026-09-07T10:20:47.313Z",
   "source": "course-match-web"
 }
@@ -103,6 +104,11 @@ Note `answer_value` rather than the plan's `is_correct`, and see
 A 2xx means success; anything else keeps the person on the email screen with an
 error rather than falsely confirming. `marketingConsent` is the opt-in
 checkbox, kept separate from the matches they actually asked for.
+
+`leadType` is `"registration"` when we had nothing to match someone with and
+they asked to be told when something opens up, `"matches"` otherwise. Sent
+explicitly so the CRM can route the two differently — they want different
+follow-up — rather than inferring it from course ids.
 
 **Nothing is emailed yet.** "Check your inbox!" only becomes true once an
 endpoint exists and something behind it sends the mail.

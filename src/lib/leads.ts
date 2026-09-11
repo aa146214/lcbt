@@ -18,6 +18,12 @@ export interface Lead {
   savedCourseIds: string[];
   matchedCourseIds: string[];
   /**
+   * "registration" when we had nothing to match them with and they asked to be
+   * told when something opens up, "matches" otherwise. Sent explicitly so the
+   * CRM can route the two differently without inferring it from course ids.
+   */
+  leadType: "matches" | "registration";
+  /**
    * Opt-in for marketing, separate from the matches they asked for. Sending
    * the matches is the thing they requested; anything beyond that needs its
    * own consent, so the CRM gets the two apart rather than inferred.
@@ -33,6 +39,7 @@ export async function submitLead(input: {
   saved: Course[];
   matched: Course[];
   marketingConsent: boolean;
+  leadType: "matches" | "registration";
 }): Promise<void> {
   const lead: Lead = {
     email: input.email.trim(),
@@ -40,6 +47,7 @@ export async function submitLead(input: {
     savedCourseIds: input.saved.map((c) => c.id),
     matchedCourseIds: input.matched.map((c) => c.id),
     marketingConsent: input.marketingConsent,
+    leadType: input.leadType,
     submittedAt: new Date().toISOString(),
     source: "course-match-web",
   };

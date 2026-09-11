@@ -1,15 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ArrowRight, Heart, X } from "lucide-react";
 import { copy, t } from "../content";
 import type { Answers, Course, MatchResult } from "../content/types";
 import { medalFor } from "../lib/matching";
 import { buildReasoning } from "../lib/reasoning";
 import { BEHIND_OFFSET, useSwipeDeck } from "../lib/useSwipeDeck";
-import {
-  trackCourseSwipe,
-  trackDiscoverAll,
-  trackQuizComplete,
-} from "../lib/analytics";
+import { trackCourseSwipe, trackDiscoverAll } from "../lib/analytics";
 import { HeartBurst } from "../components/HeartBurst";
 import { useHeartBurst } from "../lib/useHeartBurst";
 import { CourseCard } from "../components/Cards";
@@ -33,12 +29,6 @@ export function Results({
   const [saved, setSaved] = useState<Course[]>([]);
   const [expanded, setExpanded] = useState(false);
   const { bursts, glows, fire } = useHeartBurst();
-
-  useEffect(() => {
-    trackQuizComplete(cards.map((c) => c.id));
-    // The results reveal is the completion beat the tracking plan measures.
-    // trackQuizComplete only fires once per run, so a re-render is harmless.
-  }, [cards]);
 
   const { index, offset, rotation, dragHandlers, commit, done } = useSwipeDeck<Course>({
     items: cards,
