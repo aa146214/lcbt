@@ -6,15 +6,11 @@ export function Landing({ onStart }: { onStart: () => void }) {
 
   return (
     <div className="screen landing">
-      {/* Flat decorative shapes — no gradients, per the brand system. */}
-      <div className="landing__blob landing__blob--1" aria-hidden="true" />
-      <div className="landing__blob landing__blob--2" aria-hidden="true" />
+      {/* LCBT's 'smoosh' brush marks. One 9:16 composition, deliberately empty
+          down the middle, so it sits full-bleed behind the content rather than
+          being placed mark by mark. */}
+      <div className="landing__smoosh" aria-hidden="true" />
 
-      {/* Stickers pinned inside the padding band itself, so they sit in space
-          no normal-flow content ever reaches regardless of headline length. */}
-      <span className="landing__sticker" style={{ top: 6, right: 6, fontSize: 26, transform: "rotate(-12deg)" }} aria-hidden="true">⭐</span>
-      <span className="landing__sticker" style={{ bottom: 6, right: 6, fontSize: 20, transform: "rotate(10deg)" }} aria-hidden="true">💗</span>
-      <span className="landing__sticker" style={{ bottom: 6, left: 6, fontSize: 24, transform: "rotate(-8deg)" }} aria-hidden="true">💄</span>
 
       <div style={{ position: "relative" }}>
         <div className="landing__badge">{c.eyebrow}</div>

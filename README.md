@@ -114,14 +114,12 @@ Everything here needs someone else — an asset, an account, or a third party.
 1. **CRM endpoint** — URL, auth, field mapping, and which system emails the
    learner. What to ask for is in [DECISIONS.md](DECISIONS.md#crm).
 2. **GTM container ID** → `VITE_GTM_ID`, then register the dimensions above.
-3. **'Smoosh' brand assets** to replace the decorative circles — the client is
-   sending these.
-4. **Confirm the Gotham licence covers the app's domain.** The four weights
+3. **Confirm the Gotham licence covers the app's domain.** The four weights
    are now self-hosted from `public/fonts/`, taken from LCBT's own WordPress
    theme. Hoefler webfont licences are usually domain-scoped, so whoever holds
    it should check it extends to wherever this is hosted. Nothing to build —
    just paperwork.
-5. **Hosting.** Currently on Vercel at
+4. **Hosting.** Currently on Vercel at
    https://lcbt-course-match.vercel.app as a demo. `dist/` is static, so it
    moves anywhere. Note the per-deployment URLs are behind Vercel's
    deployment protection and will show a login — share the alias above, not

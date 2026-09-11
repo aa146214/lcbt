@@ -568,10 +568,17 @@ button { font-family: inherit; }
   position: relative;
   overflow: hidden;
 }
-.landing__blob { position: absolute; border-radius: 50%; pointer-events: none; }
-.landing__blob--1 { top: -50px; right: -50px; width: 170px; height: 170px; background: var(--surface); }
-.landing__blob--2 { bottom: 140px; left: -70px; width: 200px; height: 200px; background: var(--surface-alt); }
-.landing__sticker { position: absolute; pointer-events: none; }
+/* The artwork is full-bleed and sized to the shell's own aspect, so the marks
+   land where they were composed to. Held back to a watermark: at full strength
+   the brush is the same pink as DREAM in the headline and as the CTA, and it
+   fights both. */
+.landing__smoosh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url("/smoosh.png") center / cover no-repeat;
+  opacity: 0.16;
+}
 .landing__badge {
   display: inline-flex;
   align-items: center;

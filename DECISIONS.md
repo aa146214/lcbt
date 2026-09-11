@@ -39,8 +39,21 @@ From `LCBT Quiz Feedback.pdf`. Applied except where noted.
 - **"Discover All Courses"** pink CTA added to the interest-fallback screen,
   with the subtitle extended as asked.
 
-**Not done:** the decorative circles still need replacing with the 'smoosh'
-brand assets — waiting on those from the client.
+**Smoosh assets, received 11 Sept.** `public/smoosh.png` is a single 9:16
+composition, not a set of separate marks: an asterisk top right, a spiral off
+the left edge, another asterisk bottom right, and a deliberately empty middle
+column. So it goes in full-bleed behind the landing content rather than being
+placed mark by mark, and the two circles are gone.
+
+Held at 16% opacity. At full strength the brush is the same pink as DREAM in
+the headline and as the CTA, and it competes with both — `.landing__smoosh` in
+`app.css` is the one number to change if the client wants it louder.
+
+**The three emoji stickers are gone too.** Two of the three sat directly on the
+new brush marks — the star on the top-right asterisk, the heart on the
+bottom-right one. They were prototype stand-ins for brand decoration, and the
+brand decoration has now arrived. Not something the feedback asked for, so if
+they are wanted back it is a few lines in `Landing.tsx`.
 
 ## Where the live site overruled the spreadsheet
 
