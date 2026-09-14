@@ -56,6 +56,21 @@ bottom-right one. They were prototype stand-ins for brand decoration, and the
 brand decoration has now arrived. Not something the feedback asked for, so if
 they are wanted back it is a few lines in `Landing.tsx`.
 
+## Card photography
+
+Re-cropped `makeup-occasion` from the client's original TIFF, 14 Sept: the
+card was cut from the left of a landscape frame, so the subject sat small on
+one side with white studio background filling the rest.
+
+The new crop moves the window right — subject centred, the brush and hand
+carrying across the frame, white reduced to a natural edge rather than half
+the card. Framed so the face sits in the upper two-thirds, because the card's
+caption plate covers the bottom third.
+
+Exported at 720x960 rather than the 480x640 of the other six, which is roughly
+2x the card's rendered size and noticeably crisper on a phone. Worth
+re-exporting the rest from their originals so the deck matches.
+
 ## No deck when there is nothing to match
 
 19+ with no prior qualification goes straight from the loading screen to email
