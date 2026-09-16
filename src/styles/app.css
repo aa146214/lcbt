@@ -354,9 +354,6 @@ button { font-family: inherit; }
 .card {
   position: absolute;
   inset: 0;
-  /* Transform is deliberately absent: while a finger is down the card must
-     track it exactly. .card--animating adds transform when it should ease. */
-  transition: opacity 0.26s ease-out;
   border-radius: var(--radius-xl);
   overflow: hidden;
   background: var(--bg);
@@ -372,31 +369,33 @@ button { font-family: inherit; }
 }
 /* Only present while a card is settling — never while it is being dragged. */
 .card--animating {
-  transition:
-    transform 0.34s var(--ease-out),
-    box-shadow 0.34s var(--ease-out),
-    opacity 0.26s ease-out;
+  /* Transform is absent from the base .card rule on purpose: while a finger
+     is down the card must track it exactly. */
+  transition: transform 0.34s var(--ease-out), box-shadow 0.34s var(--ease-out);
 }
 /* After a right-swipe the hearts keep rising for about a second. Without this
    the next photograph is already on screen underneath them, so the burst looks
    like it belongs to a card the person hasn't reached yet. */
-/* Opacity lives on the base rule, never in a second `transition` shorthand.
-   A separate .card--revealing rule used to declare `transition: opacity ...`,
-   which silently reset transform's transition to none — and the top card
-   always carried it, so every transform animation on the deck snapped. */
-.card--entering { opacity: 0; }
+/* A card that isn't ready yet is simply out of focus. It is never hidden:
+   making it transparent showed the card *behind* it through the gap, so a
+   right-swipe looked like the next card vanished and a third one flashed up
+   before the real one returned. Staying put and blurred means nothing moves —
+   only the focus changes. */
+.card--behind > *,
+.card--entering > * {
+  filter: blur(5px);
+}
+.card > * {
+  transition: filter 0.28s ease;
+}
 
 .card--top { z-index: 3; box-shadow: var(--shadow-card); cursor: grab; }
 .card--behind { z-index: 1; box-shadow: var(--shadow-card-behind); }
 
 /* Blur the card's contents, not the card. Filtering the card itself softened
    its own edge, shadow and corners; the card should sit there exactly as
-   before and only what is printed on it should be out of focus — enough that
-   the strip peeking out below reads as another card rather than as a second,
-   sharp "Matched you" under the top one. */
-.card--behind > * {
-  filter: blur(5px);
-}
+   before and only what is printed on it should be out of focus. The rule
+   itself lives with .card--entering above, since both share it. */
 .card--top:active { cursor: grabbing; }
 
 .stamp {

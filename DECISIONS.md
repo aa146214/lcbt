@@ -77,11 +77,16 @@ push-up settle jumped, and a released drag snapped back instead of springing.
 Opacity now lives on the base `.card` rule and `.card--animating` lists all
 three properties. Verified at runtime: `opacity` alone while a finger is down,
 `transform, box-shadow, opacity` once released.
-- **The next card is held back after a like.** The hearts run for about a
-  second; the next photograph used to be on screen underneath them, so the
-  burst looked like it belonged to a card nobody had reached. The incoming card
-  now stays hidden 420ms and fades in, and the burst itself is shorter.
+- **The next card is held out of focus after a like.** The hearts run for about
+  a second; the next photograph used to be sharp underneath them, so the burst
+  looked like it belonged to a card nobody had reached. The incoming card now
+  stays blurred for 420ms and then focuses in, and the burst itself is shorter.
   Skipping is unaffected — no hearts, no pause.
+
+  It was briefly done by hiding the card instead, which was worse and looked
+  like a fault: a transparent card shows the card *behind* it, so a swipe read
+  as "next card vanishes, a third one flashes up, then the real one returns".
+  Nothing moves now — only the focus changes.
 - **The caption plate is tighter and lighter** (0.72 to 0.62 opacity, padding
   and type size down), so more of the photograph shows. A soft text-shadow
   covers the lighter plate over a pale image.
