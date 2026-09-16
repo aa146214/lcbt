@@ -381,16 +381,10 @@ button { font-family: inherit; }
 .card--behind {
   z-index: 1;
   box-shadow: var(--shadow-card-behind);
-  /* Narrower than the top card so the peek reads as a stack. Scaled from the
-     top edge so the shrink happens downward and never reaches the deck's
-     bottom, which is what let the old peek bleed out of frame.
-
-     A card behind renders no content at all (see Cards.tsx), so this plain
-     surface is the whole of what shows — no text can ever leak out from
-     under the top card, whatever the next course happens to be. */
-  transform-origin: top center;
-  scale: 0.965;
-  background: var(--surface);
+  /* Blurred, so the strip peeking out below still reads as "another card
+     underneath" without its text being legible — a sharp second "Matched you"
+     under the top card looked like a rendering fault. */
+  filter: blur(5px);
 }
 .card--top:active { cursor: grabbing; }
 

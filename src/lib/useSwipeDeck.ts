@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type SwipeDirection = "right" | "left";
 
@@ -24,19 +24,14 @@ function capture(e: React.PointerEvent, mode: "set" | "release") {
   }
 }
 
-/**
- * How far the next card peeks out from behind the top one.
- *
- * Upward, not downward. Peeking below meant the strip that showed was the
- * bottom of the next card's body — which is text, so a second "Matched you"
- * appeared to duplicate under the card. It also pushed the card past the
- * deck's bounds, and the deck doesn't clip. Peeking above shows the card's
- * solid header instead, and stays inside the deck.
- */
-export const BEHIND_OFFSET: DeckOffset = { x: 0, y: -9, animating: false };
+/** How far below the top card the next one peeks out. It is blurred, so the
+ *  strip reads as a card underneath rather than as legible duplicate text. */
+export const BEHIND_OFFSET: DeckOffset = { x: 0, y: 8, animating: false };
 
-/** How long the swiped card takes to clear the screen. */
+/** How long a liked card takes to clear the screen. */
 const FLY_MS = 300;
+/** A skip has no burst to wait for, so it gets out of the way faster. */
+const FLY_MS_SKIP = 170;
 /** How long the card behind takes to settle into the top slot. */
 const PROMOTE_MS = 340;
 
@@ -47,8 +42,26 @@ const AXIS_SLOP = 8;
  *  on the card that earned them rather than the next one. */
 const REVEAL_DELAY_MS = 420;
 
+/**
+ * The first card demonstrates the gesture: a nudge right far enough to show
+ * the "yes" stamp, back to centre, a nudge left for the "no" stamp, back
+ * again. Teaching by doing, rather than adding more instructions to read.
+ *
+ * Each step is [x offset, ms to hold it]. It is cancelled the moment the
+ * person touches the card — they clearly don't need it.
+ */
+const HINT_STEPS: [number, number][] = [
+  [0, 750],
+  [78, 620],
+  [0, 340],
+  [-78, 620],
+  [0, 0],
+];
+
 interface Options<T> {
   items: T[];
+  /** Play the one-off gesture demo on the very first card. */
+  hint?: boolean;
   /** Distance in px past which releasing commits the swipe. */
   threshold?: number;
   /** Movement below this (px, total) counts as a tap rather than a drag. */
@@ -68,6 +81,7 @@ interface Options<T> {
  */
 export function useSwipeDeck<T>({
   items,
+  hint = false,
   threshold = 100,
   tapSlop = 6,
   onSwipe,
@@ -77,6 +91,11 @@ export function useSwipeDeck<T>({
   const [index, setIndex] = useState(0);
   const [entering, setEntering] = useState(false);
   const [offset, setOffset] = useState<DeckOffset>(REST);
+  /** Set once the person touches the deck — they don't need the demo. */
+  const hintCancelled = useRef(false);
+  const cancelHint = () => {
+    hintCancelled.current = true;
+  };
   const drag = useRef<{
     startX: number;
     startY: number;
@@ -97,10 +116,12 @@ export function useSwipeDeck<T>({
   const commit = useCallback(
     (direction: SwipeDirection) => {
       if (busy.current || index >= items.length) return;
+      cancelHint();
       busy.current = true;
       const flyX = direction === "right" ? 600 : -600;
       setOffsetBoth({ x: flyX, y: offsetRef.current.y - 40, animating: true });
       onSwipe?.(items[index], direction, index);
+      const flyMs = direction === "right" ? FLY_MS : FLY_MS_SKIP;
       window.setTimeout(() => {
         // The card behind is sitting BEHIND_OFFSET.y lower. Promoting it with
         // the transition still switched on lets it ease up into the top slot
@@ -125,14 +146,38 @@ export function useSwipeDeck<T>({
         window.setTimeout(() => {
           if (!drag.current.dragging && !busy.current) setOffsetBoth(REST);
         }, PROMOTE_MS);
-      }, FLY_MS);
+      }, flyMs);
     },
     [index, items, onSwipe, onExhausted],
   );
 
+  /* Plays on the first card only. Deliberately has no "already ran" latch:
+     React re-invokes effects in development, and a latch set here would make
+     the first pass schedule the timers, its cleanup clear them, and the second
+     pass do nothing — so the demo never appeared. Cancellation is tracked
+     separately, by the person's own touch. */
+  useEffect(() => {
+    if (!hint || items.length === 0) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timers: number[] = [];
+    let elapsed = 0;
+    for (const [x, hold] of HINT_STEPS) {
+      timers.push(
+        window.setTimeout(() => {
+          if (hintCancelled.current || drag.current.dragging || busy.current) return;
+          setOffsetBoth({ x, y: 0, animating: true });
+        }, elapsed),
+      );
+      elapsed += hold;
+    }
+    return () => timers.forEach(window.clearTimeout);
+  }, [hint, items.length]);
+
   const dragHandlers = {
     onPointerDown: (e: React.PointerEvent) => {
       if (busy.current) return;
+      cancelHint();
       // Capture is deliberately NOT taken here. Grabbing the pointer on touch-
       // down suppresses the browser's own scrolling, and the card body is a
       // scroll container — so we wait until we know the gesture is horizontal

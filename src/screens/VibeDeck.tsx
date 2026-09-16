@@ -12,7 +12,6 @@ import {
 import { HeartBurst } from "../components/HeartBurst";
 import { useHeartBurst } from "../lib/useHeartBurst";
 import { VibeCardView } from "../components/Cards";
-import { SwipeHint } from "../components/SwipeHint";
 import { TileGrid } from "../components/Tiles";
 import { INTEREST_STYLE } from "../components/icons";
 
@@ -30,6 +29,9 @@ export function VibeDeck({ onComplete }: { onComplete: (interest: InterestId) =>
 
   const { index, offset, rotation, dragHandlers, commit, done, entering } = useSwipeDeck<VibeCard>({
     items: vibeCards,
+    // Only the vibe deck teaches the gesture — by the results deck they have
+    // already swiped seven cards.
+    hint: true,
     onSwipe: (card, direction) => {
       trackQuestionAnswered(card.id, direction === "right" ? "yes" : "no");
       if (direction === "right") {
@@ -60,14 +62,8 @@ export function VibeDeck({ onComplete }: { onComplete: (interest: InterestId) =>
           {index + 1} of {vibeCards.length}
         </div>
         <h2 className="h2">{copy.vibe.headline}</h2>
+        <p className="sub">{copy.vibe.sub}</p>
       </div>
-
-      <SwipeHint
-        left={copy.vibe.hintLeft}
-        leftSub={copy.vibe.hintLeftSub}
-        right={copy.vibe.hintRight}
-        rightSub={copy.vibe.hintRightSub}
-      />
 
       <div className="deck">
         <HeartBurst bursts={bursts} glows={glows} />

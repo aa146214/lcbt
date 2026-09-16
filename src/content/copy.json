@@ -35,11 +35,7 @@
     "fallbackHeadline": "Didn't love any of those?",
     "fallbackSub": "No worries, just tap what excites you most, or learn about all of our courses.",
     "fallbackCta": "Discover All Courses",
-    "fallbackCtaUrl": "https://www.lcbt.co.uk/courses/",
-    "hintLeft": "Swipe left",
-    "hintLeftSub": "Not for me",
-    "hintRight": "Swipe right",
-    "hintRightSub": "Into it"
+    "fallbackCtaUrl": "https://www.lcbt.co.uk/courses/"
   },
   "calculating": {
     "message": "Calculating your matches..."
@@ -68,11 +64,7 @@
       "bronze": "ALSO WORTH A LOOK"
     },
     "discoverCta": "Discover All Courses",
-    "discoverUrl": "https://www.lcbt.co.uk/courses/",
-    "hintLeft": "Swipe left",
-    "hintLeftSub": "Skip",
-    "hintRight": "Swipe right",
-    "hintRightSub": "Save"
+    "discoverUrl": "https://www.lcbt.co.uk/courses/"
   },
   "email": {
     "headline": "Almost there",

@@ -58,9 +58,12 @@ they are wanted back it is a few lines in `Landing.tsx`.
 
 ## Deck feedback, 16 Sept
 
-- **Swipe directions are two labelled controls**, not a grey sentence people
-  skipped past. Each is coloured to match the button it describes — muted with
-  the X, pink with the heart — and they sit directly above the card.
+- **The first card demonstrates the gesture.** It nudges right far enough to
+  show the "YASSSS" stamp, returns, nudges left for "NOT FOR ME", returns —
+  then never again. Teaching by doing, the way Tinder does it, rather than
+  adding more words to read; the original sentence is unchanged. Cancelled the
+  instant the person touches the card, and skipped entirely under
+  `prefers-reduced-motion`.
 - **The next card is held back after a like.** The hearts run for about a
   second; the next photograph used to be on screen underneath them, so the
   burst looked like it belonged to a card nobody had reached. The incoming card
@@ -73,19 +76,20 @@ they are wanted back it is a few lines in `Landing.tsx`.
   read as *a subject you might study*, and the sentence below already explains
   what happens next. This supersedes the "Loving all of it" variant.
 
+- **A skip no longer waits.** Only a like fires the hearts, so only a like
+  needs the pause — the skipped card now clears in 170ms rather than 300ms.
+  Measured before changing it: opacity on the incoming card never dropped on a
+  left swipe, so there was no hold, just a fly-out slower than it needed to be.
+
 ### The duplicated "Matched you"
 
-The card behind sat 8px *below* the top one, and `.deck` doesn't clip — so that
-strip rendered outside the deck, showing the bottom of the next card's body,
-which is text. On a course card that is the reason block, so "Matched you"
-appeared twice.
+The card behind sits 8px below the top one and `.deck` doesn't clip, so that
+strip renders outside the deck showing the bottom of the next card's body —
+which on a course card is the reason block, hence a second "Matched you".
 
-Fixed in two places, because either alone leaves a way for it to come back:
-
-- The peek is now **above** the card, scaled from the top edge, so nothing
-  reaches the deck's bottom.
-- **A card behind renders no content at all** — just the shell. Whatever the
-  next course happens to be, there is nothing there to leak.
+The peek is wanted: it says there are more cards. So the card behind is simply
+**blurred** (5px). The strip still reads as another card underneath; its text
+no longer reads as anything at all.
 
 ## Card photography
 

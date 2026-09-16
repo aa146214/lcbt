@@ -79,22 +79,17 @@ export function VibeCardView({
 }) {
   return (
     <article
-      /* card--photo paints black behind the photograph while it decodes. A
-         card behind shows no photograph, so it would just be a black stripe
-         peeking over the top card. */
-      className={cardClass(offset, isTop, isTop ? "card--photo" : undefined, entering)}
+      className={cardClass(offset, isTop, "card--photo", entering)}
       style={cardStyle(offset, rotation)}
       {...(isTop ? dragHandlers : {})}
     >
       {isTop && (
-        <>
-          <Stamps offset={offset} right={copy.vibe.stampRight} left={copy.vibe.stampLeft} />
-          <img className="vibe-card__img" src={card.image} alt="" draggable={false} />
-          <div className="vibe-card__plate">
-            <h3 className="vibe-card__text">{card.text}</h3>
-          </div>
-        </>
+        <Stamps offset={offset} right={copy.vibe.stampRight} left={copy.vibe.stampLeft} />
       )}
+      <img className="vibe-card__img" src={card.image} alt="" draggable={false} />
+      <div className="vibe-card__plate">
+        <h3 className="vibe-card__text">{card.text}</h3>
+      </div>
     </article>
   );
 }
@@ -158,9 +153,9 @@ export function CourseCard({
       style={cardStyle(offset, rotation)}
       {...(isTop ? dragHandlers : {})}
     >
-      {!isTop ? null : (
-        <>
-      <Stamps offset={offset} right={copy.results.stampRight} left={copy.results.stampLeft} />
+      {isTop && (
+        <Stamps offset={offset} right={copy.results.stampRight} left={copy.results.stampLeft} />
+      )}
 
       <div
         className={`course-card__head${expanded ? " course-card__head--compact" : ""}`}
@@ -232,8 +227,6 @@ export function CourseCard({
           </div>
         )}
       </div>
-        </>
-      )}
     </article>
   );
 }
