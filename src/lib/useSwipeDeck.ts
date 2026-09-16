@@ -131,18 +131,20 @@ export function useSwipeDeck<T>({
       const flyX = direction === "right" ? 600 : -600;
       setOffsetBoth({ x: flyX, y: offsetRef.current.y - 40, animating: true });
       onSwipe?.(items[index], direction, index);
+      /* The card behind sits BEHIND_OFFSET.y lower. Easing it up into the top
+         slot is what makes the stack settle rather than jump-cut. */
+      const settle = () => {
+        setOffsetBoth({ x: 0, y: 0, animating: true });
+        // Drop the transition once it has played, so the next drag tracks the
+        // finger from the first pixel. Skipped if another gesture has already
+        // taken over in the meantime.
+        window.setTimeout(() => {
+          if (!drag.current.dragging && !busy.current) setOffsetBoth(REST);
+        }, PROMOTE_MS);
+      };
+
       const flyMs = direction === "right" ? FLY_MS : FLY_MS_SKIP;
       window.setTimeout(() => {
-        // The card behind is sitting BEHIND_OFFSET.y lower. Promoting it with
-        // the transition still switched on lets it ease up into the top slot
-        // rather than snapping there, so the stack visibly settles after each
-        // swipe instead of jump-cutting.
-        setOffsetBoth({ x: 0, y: 0, animating: true });
-        // Only a like fires the hearts, so only a like needs the pause.
-        if (direction === "right") {
-          setEntering(true);
-          window.setTimeout(() => setEntering(false), REVEAL_DELAY_MS);
-        }
         setIndex((i) => {
           const next = i + 1;
           if (next >= items.length) onExhausted?.();
@@ -150,12 +152,21 @@ export function useSwipeDeck<T>({
         });
         busy.current = false;
 
-        // Drop the transition once it has played, so the next drag tracks the
-        // finger from the first pixel. Skipped if another gesture has already
-        // taken over in the meantime.
-        window.setTimeout(() => {
-          if (!drag.current.dragging && !busy.current) setOffsetBoth(REST);
-        }, PROMOTE_MS);
+        if (direction === "right") {
+          /* Wait out the hearts before touching the next card at all. It holds
+             exactly where it already sat — same position, same blur — so
+             nothing about it changes while the burst plays. Then it rises and
+             comes into focus together, as one movement. */
+          setOffsetBoth({ x: 0, y: BEHIND_OFFSET.y, animating: false });
+          setEntering(true);
+          window.setTimeout(() => {
+            setEntering(false);
+            settle();
+          }, REVEAL_DELAY_MS);
+        } else {
+          // Nothing to wait for on a skip.
+          settle();
+        }
       }, flyMs);
     },
     [index, items, onSwipe, onExhausted],

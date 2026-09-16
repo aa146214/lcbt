@@ -86,7 +86,17 @@ three properties. Verified at runtime: `opacity` alone while a finger is down,
   It was briefly done by hiding the card instead, which was worse and looked
   like a fault: a transparent card shows the card *behind* it, so a swipe read
   as "next card vanishes, a third one flashes up, then the real one returns".
-  Nothing moves now — only the focus changes.
+
+  The settle waits with it. The card holds exactly where it already sat, at the
+  same offset and the same blur, so nothing about it changes while the burst
+  plays — then it rises into the top slot and comes into focus as one movement.
+  Measured: still at y=8 and blur(5px) from 360ms to 720ms, resolving together
+  by 990ms.
+
+- **The coach panel animates on insertion, not on a state change.** It mounts
+  already showing, so a transition had no previous state to run from and it
+  simply appeared. Keyframes run when the element is inserted, which is what
+  "popping in" needs.
 - **The caption plate is tighter and lighter** (0.72 to 0.62 opacity, padding
   and type size down), so more of the photograph shows. A soft text-shadow
   covers the lighter plate over a pale image.
