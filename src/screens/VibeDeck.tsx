@@ -27,7 +27,8 @@ export function VibeDeck({ onComplete }: { onComplete: (interest: InterestId) =>
   const [finished, setFinished] = useState(false);
   const { bursts, glows, fire } = useHeartBurst();
 
-  const { index, offset, rotation, dragHandlers, commit, done, entering } = useSwipeDeck<VibeCard>({
+  const { index, offset, rotation, dragHandlers, commit, done, entering, coach } =
+    useSwipeDeck<VibeCard>({
     items: vibeCards,
     // Only the vibe deck teaches the gesture — by the results deck they have
     // already swiped seven cards.
@@ -79,6 +80,8 @@ export function VibeDeck({ onComplete }: { onComplete: (interest: InterestId) =>
               rotation={isTop ? rotation : 0}
               dragHandlers={dragHandlers}
               entering={isTop && entering}
+              coach={coach}
+              coachText={copy.vibe.sub}
             />
           );
         })}

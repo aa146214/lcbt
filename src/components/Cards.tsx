@@ -29,7 +29,7 @@ function cardClass(
     extra,
     isTop ? "card--top" : "card--behind",
     offset.animating ? "card--animating" : "",
-    isTop ? (entering ? "card--entering" : "card--revealing") : "",
+    isTop && entering ? "card--entering" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -69,6 +69,8 @@ export function VibeCardView({
   rotation,
   dragHandlers,
   entering,
+  coach,
+  coachText,
 }: {
   card: VibeCard;
   isTop: boolean;
@@ -76,6 +78,8 @@ export function VibeCardView({
   rotation: number;
   dragHandlers: Record<string, unknown>;
   entering?: boolean;
+  coach?: "in" | "out" | null;
+  coachText?: string;
 }) {
   return (
     <article
@@ -90,6 +94,11 @@ export function VibeCardView({
       <div className="vibe-card__plate">
         <h3 className="vibe-card__text">{card.text}</h3>
       </div>
+      {isTop && coach && coachText && (
+        <div className="card-coach" data-state={coach} aria-hidden="true">
+          <span>{coachText}</span>
+        </div>
+      )}
     </article>
   );
 }

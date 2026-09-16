@@ -58,12 +58,25 @@ they are wanted back it is a few lines in `Landing.tsx`.
 
 ## Deck feedback, 16 Sept
 
-- **The first card demonstrates the gesture.** It nudges right far enough to
-  show the "YASSSS" stamp, returns, nudges left for "NOT FOR ME", returns —
-  then never again. Teaching by doing, the way Tinder does it, rather than
-  adding more words to read; the original sentence is unchanged. Cancelled the
-  instant the person touches the card, and skipped entirely under
-  `prefers-reduced-motion`.
+- **The first card says it, then shows it.** A translucent panel rises onto the
+  card carrying "Swipe right if you're into it, left if you're not", holds for
+  about a second, then lifts away — and the card nudges right to show the
+  "YASSSS" stamp, returns, nudges left for "NOT FOR ME", returns. Once only.
+  Cancelled the instant the person touches the card. Under
+  `prefers-reduced-motion` the message still shows and the nudge does not: the
+  words are information, the movement is decoration.
+
+### A transition shorthand that killed every other transition
+
+Worth recording, because the symptom was miles from the cause. `.card--revealing`
+declared `transition: opacity 0.26s` — a *shorthand*, so it reset `transform`'s
+transition to none. The top card always carried that class, so from the moment
+it was added nothing on the deck eased any more: the gesture demo jumped, the
+push-up settle jumped, and a released drag snapped back instead of springing.
+
+Opacity now lives on the base `.card` rule and `.card--animating` lists all
+three properties. Verified at runtime: `opacity` alone while a finger is down,
+`transform, box-shadow, opacity` once released.
 - **The next card is held back after a like.** The hearts run for about a
   second; the next photograph used to be on screen underneath them, so the
   burst looked like it belonged to a card nobody had reached. The incoming card
@@ -87,9 +100,11 @@ The card behind sits 8px below the top one and `.deck` doesn't clip, so that
 strip renders outside the deck showing the bottom of the next card's body —
 which on a course card is the reason block, hence a second "Matched you".
 
-The peek is wanted: it says there are more cards. So the card behind is simply
-**blurred** (5px). The strip still reads as another card underneath; its text
-no longer reads as anything at all.
+The peek is wanted: it says there are more cards. So the card behind keeps its
+exact previous geometry and only its **contents** are blurred (5px) — the rule
+is `.card--behind > *`, not the card. Filtering the card itself softened its own
+edge, shadow and corners; this leaves the card sitting where it always did and
+only what is printed on it out of focus.
 
 ## Card photography
 

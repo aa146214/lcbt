@@ -354,6 +354,9 @@ button { font-family: inherit; }
 .card {
   position: absolute;
   inset: 0;
+  /* Transform is deliberately absent: while a finger is down the card must
+     track it exactly. .card--animating adds transform when it should ease. */
+  transition: opacity 0.26s ease-out;
   border-radius: var(--radius-xl);
   overflow: hidden;
   background: var(--bg);
@@ -369,21 +372,29 @@ button { font-family: inherit; }
 }
 /* Only present while a card is settling — never while it is being dragged. */
 .card--animating {
-  transition: transform 0.34s var(--ease-out), box-shadow 0.34s var(--ease-out);
+  transition:
+    transform 0.34s var(--ease-out),
+    box-shadow 0.34s var(--ease-out),
+    opacity 0.26s ease-out;
 }
 /* After a right-swipe the hearts keep rising for about a second. Without this
    the next photograph is already on screen underneath them, so the burst looks
    like it belongs to a card the person hasn't reached yet. */
+/* Opacity lives on the base rule, never in a second `transition` shorthand.
+   A separate .card--revealing rule used to declare `transition: opacity ...`,
+   which silently reset transform's transition to none — and the top card
+   always carried it, so every transform animation on the deck snapped. */
 .card--entering { opacity: 0; }
-.card--revealing { opacity: 1; transition: opacity 0.26s ease-out; }
 
 .card--top { z-index: 3; box-shadow: var(--shadow-card); cursor: grab; }
-.card--behind {
-  z-index: 1;
-  box-shadow: var(--shadow-card-behind);
-  /* Blurred, so the strip peeking out below still reads as "another card
-     underneath" without its text being legible — a sharp second "Matched you"
-     under the top card looked like a rendering fault. */
+.card--behind { z-index: 1; box-shadow: var(--shadow-card-behind); }
+
+/* Blur the card's contents, not the card. Filtering the card itself softened
+   its own edge, shadow and corners; the card should sit there exactly as
+   before and only what is printed on it should be out of focus — enough that
+   the strip peeking out below reads as another card rather than as a second,
+   sharp "Matched you" under the top one. */
+.card--behind > * {
   filter: blur(5px);
 }
 .card--top:active { cursor: grabbing; }
@@ -403,6 +414,42 @@ button { font-family: inherit; }
 }
 .stamp--right { left: 20px; color: var(--pink); transform: rotate(-14deg); }
 .stamp--left { right: 20px; color: var(--grey); transform: rotate(14deg); }
+
+/* The gesture coach: says what to do, then gets out of the way and shows it.
+   Sits above the photograph but below the swipe stamps, and never takes a
+   pointer event — a tap during it should start a real swipe, not be swallowed. */
+.card-coach {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card-coach[data-state="in"] { opacity: 1; }
+.card-coach[data-state="out"] { opacity: 0; }
+.card-coach span {
+  background: rgba(25, 6, 28, 0.82);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15.5px;
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
+  padding: 15px 18px;
+  border-radius: var(--radius-md);
+  /* Rises in, keeps rising on the way out, so the message feels like it
+     lifts off the card rather than blinking away. */
+  transform: translateY(12px);
+  transition: transform 0.3s var(--ease-out);
+}
+.card-coach[data-state="in"] span { transform: translateY(0); }
+.card-coach[data-state="out"] span { transform: translateY(-12px); }
 
 /* Vibe card */
 .card--photo { background: #000; }

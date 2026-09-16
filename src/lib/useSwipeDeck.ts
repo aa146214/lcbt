@@ -51,12 +51,18 @@ const REVEAL_DELAY_MS = 420;
  * person touches the card — they clearly don't need it.
  */
 const HINT_STEPS: [number, number][] = [
-  [0, 750],
-  [78, 620],
+  [78, 640],
   [0, 340],
-  [-78, 620],
+  [-78, 640],
   [0, 0],
 ];
+
+/** The coach message reads first, then gets out of the way. About a second on
+ *  screen — long enough to read seven words, short enough not to be in the way. */
+const COACH_HOLD_MS = 950;
+const COACH_FADE_MS = 300;
+/** Nudging starts once the message has cleared. */
+const HINT_START_MS = COACH_HOLD_MS + COACH_FADE_MS + 100;
 
 interface Options<T> {
   items: T[];
@@ -91,10 +97,14 @@ export function useSwipeDeck<T>({
   const [index, setIndex] = useState(0);
   const [entering, setEntering] = useState(false);
   const [offset, setOffset] = useState<DeckOffset>(REST);
+  /** null hides it; "in" and "out" drive the fade. Initialised from the prop
+   *  so the effect below never has to set it synchronously on mount. */
+  const [coach, setCoach] = useState<"in" | "out" | null>(hint ? "in" : null);
   /** Set once the person touches the deck — they don't need the demo. */
   const hintCancelled = useRef(false);
   const cancelHint = () => {
     hintCancelled.current = true;
+    setCoach((c) => (c === "in" ? "out" : c));
   };
   const drag = useRef<{
     startX: number;
@@ -158,19 +168,32 @@ export function useSwipeDeck<T>({
      separately, by the person's own touch. */
   useEffect(() => {
     if (!hint || items.length === 0) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const timers: number[] = [];
-    let elapsed = 0;
+    const live = () => !hintCancelled.current && !drag.current.dragging && !busy.current;
+
+    // The message reads first and clears either way; only the nudge that
+    // follows is motion, so only that is withheld under reduced motion.
+    timers.push(window.setTimeout(() => setCoach((c) => (c ? "out" : c)), COACH_HOLD_MS));
+    timers.push(window.setTimeout(() => setCoach(null), COACH_HOLD_MS + COACH_FADE_MS));
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return () => timers.forEach(window.clearTimeout);
+    }
+
+    let elapsed = HINT_START_MS;
     for (const [x, hold] of HINT_STEPS) {
       timers.push(
         window.setTimeout(() => {
-          if (hintCancelled.current || drag.current.dragging || busy.current) return;
+          if (!live()) return;
           setOffsetBoth({ x, y: 0, animating: true });
         }, elapsed),
       );
       elapsed += hold;
     }
+    // Only the timers are torn down. Clearing `coach` here would undo the
+    // initial state on React's development double-invoke — cleanup runs
+    // between the two passes — and the message would never appear at all.
     return () => timers.forEach(window.clearTimeout);
   }, [hint, items.length]);
 
@@ -252,5 +275,5 @@ export function useSwipeDeck<T>({
     busy.current = false;
   }, []);
 
-  return { index, offset, rotation, dragHandlers, commit, done, entering, reset };
+  return { index, offset, rotation, dragHandlers, commit, done, entering, coach, reset };
 }
