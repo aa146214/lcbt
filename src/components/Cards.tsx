@@ -18,12 +18,18 @@ function cardStyle(offset: DeckOffset, rotation: number): React.CSSProperties {
  * covers the shadow swap as a card is promoted from behind to top. While a
  * finger is down there is no transition at all, so the card tracks 1:1.
  */
-function cardClass(offset: DeckOffset, isTop: boolean, extra?: string) {
+function cardClass(
+  offset: DeckOffset,
+  isTop: boolean,
+  extra?: string,
+  entering?: boolean,
+) {
   return [
     "card",
     extra,
     isTop ? "card--top" : "card--behind",
     offset.animating ? "card--animating" : "",
+    isTop ? (entering ? "card--entering" : "card--revealing") : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -62,26 +68,33 @@ export function VibeCardView({
   offset,
   rotation,
   dragHandlers,
+  entering,
 }: {
   card: VibeCard;
   isTop: boolean;
   offset: DeckOffset;
   rotation: number;
   dragHandlers: Record<string, unknown>;
+  entering?: boolean;
 }) {
   return (
     <article
-      className={cardClass(offset, isTop, "card--photo")}
+      /* card--photo paints black behind the photograph while it decodes. A
+         card behind shows no photograph, so it would just be a black stripe
+         peeking over the top card. */
+      className={cardClass(offset, isTop, isTop ? "card--photo" : undefined, entering)}
       style={cardStyle(offset, rotation)}
       {...(isTop ? dragHandlers : {})}
     >
       {isTop && (
-        <Stamps offset={offset} right={copy.vibe.stampRight} left={copy.vibe.stampLeft} />
+        <>
+          <Stamps offset={offset} right={copy.vibe.stampRight} left={copy.vibe.stampLeft} />
+          <img className="vibe-card__img" src={card.image} alt="" draggable={false} />
+          <div className="vibe-card__plate">
+            <h3 className="vibe-card__text">{card.text}</h3>
+          </div>
+        </>
       )}
-      <img className="vibe-card__img" src={card.image} alt="" draggable={false} />
-      <div className="vibe-card__plate">
-        <h3 className="vibe-card__text">{card.text}</h3>
-      </div>
     </article>
   );
 }
@@ -117,6 +130,7 @@ export function CourseCard({
   reasoning,
   goalClause,
   age,
+  entering,
 }: {
   course: Course;
   medal: MedalRank | null;
@@ -129,6 +143,7 @@ export function CourseCard({
   reasoning: string | null;
   goalClause: string | null;
   age?: AgeId;
+  entering?: boolean;
 }) {
   const cat = CATEGORY_STYLE[course.category] ?? CATEGORY_STYLE.beauty;
   const Icon = cat.icon;
@@ -139,13 +154,13 @@ export function CourseCard({
 
   return (
     <article
-      className={cardClass(offset, isTop)}
+      className={cardClass(offset, isTop, undefined, entering)}
       style={cardStyle(offset, rotation)}
       {...(isTop ? dragHandlers : {})}
     >
-      {isTop && (
-        <Stamps offset={offset} right={copy.results.stampRight} left={copy.results.stampLeft} />
-      )}
+      {!isTop ? null : (
+        <>
+      <Stamps offset={offset} right={copy.results.stampRight} left={copy.results.stampLeft} />
 
       <div
         className={`course-card__head${expanded ? " course-card__head--compact" : ""}`}
@@ -217,6 +232,8 @@ export function CourseCard({
           </div>
         )}
       </div>
+        </>
+      )}
     </article>
   );
 }

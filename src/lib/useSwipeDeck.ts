@@ -24,8 +24,16 @@ function capture(e: React.PointerEvent, mode: "set" | "release") {
   }
 }
 
-/** How far below the top card the next one peeks out. */
-export const BEHIND_OFFSET: DeckOffset = { x: 0, y: 8, animating: false };
+/**
+ * How far the next card peeks out from behind the top one.
+ *
+ * Upward, not downward. Peeking below meant the strip that showed was the
+ * bottom of the next card's body — which is text, so a second "Matched you"
+ * appeared to duplicate under the card. It also pushed the card past the
+ * deck's bounds, and the deck doesn't clip. Peeking above shows the card's
+ * solid header instead, and stays inside the deck.
+ */
+export const BEHIND_OFFSET: DeckOffset = { x: 0, y: -9, animating: false };
 
 /** How long the swiped card takes to clear the screen. */
 const FLY_MS = 300;
@@ -34,6 +42,10 @@ const PROMOTE_MS = 340;
 
 /** Movement before we decide whether a gesture is a swipe or a scroll. */
 const AXIS_SLOP = 8;
+
+/** How long the incoming card stays hidden after a like, so the hearts land
+ *  on the card that earned them rather than the next one. */
+const REVEAL_DELAY_MS = 420;
 
 interface Options<T> {
   items: T[];
@@ -63,6 +75,7 @@ export function useSwipeDeck<T>({
   onExhausted,
 }: Options<T>) {
   const [index, setIndex] = useState(0);
+  const [entering, setEntering] = useState(false);
   const [offset, setOffset] = useState<DeckOffset>(REST);
   const drag = useRef<{
     startX: number;
@@ -94,6 +107,11 @@ export function useSwipeDeck<T>({
         // rather than snapping there, so the stack visibly settles after each
         // swipe instead of jump-cutting.
         setOffsetBoth({ x: 0, y: 0, animating: true });
+        // Only a like fires the hearts, so only a like needs the pause.
+        if (direction === "right") {
+          setEntering(true);
+          window.setTimeout(() => setEntering(false), REVEAL_DELAY_MS);
+        }
         setIndex((i) => {
           const next = i + 1;
           if (next >= items.length) onExhausted?.();
@@ -184,9 +202,10 @@ export function useSwipeDeck<T>({
 
   const reset = useCallback(() => {
     setIndex(0);
+    setEntering(false);
     setOffsetBoth(REST);
     busy.current = false;
   }, []);
 
-  return { index, offset, rotation, dragHandlers, commit, done, reset };
+  return { index, offset, rotation, dragHandlers, commit, done, entering, reset };
 }

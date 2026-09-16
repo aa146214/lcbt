@@ -56,6 +56,37 @@ bottom-right one. They were prototype stand-ins for brand decoration, and the
 brand decoration has now arrived. Not something the feedback asked for, so if
 they are wanted back it is a few lines in `Landing.tsx`.
 
+## Deck feedback, 16 Sept
+
+- **Swipe directions are two labelled controls**, not a grey sentence people
+  skipped past. Each is coloured to match the button it describes — muted with
+  the X, pink with the heart — and they sit directly above the card.
+- **The next card is held back after a like.** The hearts run for about a
+  second; the next photograph used to be on screen underneath them, so the
+  burst looked like it belonged to a card nobody had reached. The incoming card
+  now stays hidden 420ms and fades in, and the burst itself is shorter.
+  Skipping is unaffected — no hearts, no pause.
+- **The caption plate is tighter and lighter** (0.72 to 0.62 opacity, padding
+  and type size down), so more of the photograph shows. A soft text-shadow
+  covers the lighter plate over a pale image.
+- **"Got your vibe."** no longer names the subject. "Leaning make-up" did not
+  read as *a subject you might study*, and the sentence below already explains
+  what happens next. This supersedes the "Loving all of it" variant.
+
+### The duplicated "Matched you"
+
+The card behind sat 8px *below* the top one, and `.deck` doesn't clip — so that
+strip rendered outside the deck, showing the bottom of the next card's body,
+which is text. On a course card that is the reason block, so "Matched you"
+appeared twice.
+
+Fixed in two places, because either alone leaves a way for it to come back:
+
+- The peek is now **above** the card, scaled from the top edge, so nothing
+  reaches the deck's bottom.
+- **A card behind renders no content at all** — just the shell. Whatever the
+  next course happens to be, there is nothing there to leak.
+
 ## Card photography
 
 Re-cropped `makeup-occasion` from the client's original TIFF, 14 Sept: the

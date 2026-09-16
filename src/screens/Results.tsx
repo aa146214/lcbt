@@ -9,6 +9,7 @@ import { trackCourseSwipe, trackDiscoverAll } from "../lib/analytics";
 import { HeartBurst } from "../components/HeartBurst";
 import { useHeartBurst } from "../lib/useHeartBurst";
 import { CourseCard } from "../components/Cards";
+import { SwipeHint } from "../components/SwipeHint";
 
 export function Results({
   matches,
@@ -30,7 +31,7 @@ export function Results({
   const [expanded, setExpanded] = useState(false);
   const { bursts, glows, fire } = useHeartBurst();
 
-  const { index, offset, rotation, dragHandlers, commit, done } = useSwipeDeck<Course>({
+  const { index, offset, rotation, dragHandlers, commit, done, entering } = useSwipeDeck<Course>({
     items: cards,
     threshold: 110,
     onSwipe: (course, direction) => {
@@ -53,10 +54,16 @@ export function Results({
         <h2 className="h3">
           {isRegisterInterest ? copy.results.noMatchHeadline : copy.results.headline}
         </h2>
-        <p className="sub" style={{ fontSize: 12, marginTop: 3 }}>
-          {isRegisterInterest ? copy.results.noMatchSub : copy.results.sub}
-        </p>
       </div>
+
+      {!isRegisterInterest && !done && (
+        <SwipeHint
+          left={copy.results.hintLeft}
+          leftSub={copy.results.hintLeftSub}
+          right={copy.results.hintRight}
+          rightSub={copy.results.hintRightSub}
+        />
+      )}
 
       <div className="deck">
         <HeartBurst bursts={bursts} glows={glows} />
@@ -84,6 +91,7 @@ export function Results({
                 reasoning={reasoning}
                 goalClause={goalClause}
                 age={answers.age}
+                entering={isTop && entering}
               />
             );
           })

@@ -22,13 +22,13 @@ export function useHeartBurst() {
     const glowId = `${stamp}-glow`;
     setGlows((prev) => [...prev, glowId]);
     timers.current.push(
-      window.setTimeout(() => setGlows((prev) => prev.filter((g) => g !== glowId)), 950),
+      window.setTimeout(() => setGlows((prev) => prev.filter((g) => g !== glowId)), 780),
     );
 
-    const next: Burst[] = Array.from({ length: 7 }).map((_, i) => ({
+    const next: Burst[] = Array.from({ length: 6 }).map((_, i) => ({
       id: `${stamp}-${i}`,
       x: 30 + Math.random() * 40,
-      delay: i * 55,
+      delay: i * 40,
       size: 26 + Math.random() * 20,
       rotate: -20 + Math.random() * 40,
     }));
@@ -37,7 +37,7 @@ export function useHeartBurst() {
       window.setTimeout(() => {
         const ids = new Set(next.map((b) => b.id));
         setBursts((prev) => prev.filter((b) => !ids.has(b.id)));
-      }, 1200),
+      }, 1000),
     );
   }, []);
 

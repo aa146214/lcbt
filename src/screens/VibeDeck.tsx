@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Heart, X } from "lucide-react";
-import { copy, t, interestPhrase, interests, questionNumber, vibeCards } from "../content";
+import { copy, interests, questionNumber, vibeCards } from "../content";
 import type { InterestId, VibeCard } from "../content/types";
 import { computeInterest } from "../lib/matching";
 import { BEHIND_OFFSET, useSwipeDeck } from "../lib/useSwipeDeck";
@@ -12,6 +12,7 @@ import {
 import { HeartBurst } from "../components/HeartBurst";
 import { useHeartBurst } from "../lib/useHeartBurst";
 import { VibeCardView } from "../components/Cards";
+import { SwipeHint } from "../components/SwipeHint";
 import { TileGrid } from "../components/Tiles";
 import { INTEREST_STYLE } from "../components/icons";
 
@@ -27,7 +28,7 @@ export function VibeDeck({ onComplete }: { onComplete: (interest: InterestId) =>
   const [finished, setFinished] = useState(false);
   const { bursts, glows, fire } = useHeartBurst();
 
-  const { index, offset, rotation, dragHandlers, commit, done } = useSwipeDeck<VibeCard>({
+  const { index, offset, rotation, dragHandlers, commit, done, entering } = useSwipeDeck<VibeCard>({
     items: vibeCards,
     onSwipe: (card, direction) => {
       trackQuestionAnswered(card.id, direction === "right" ? "yes" : "no");
@@ -59,8 +60,14 @@ export function VibeDeck({ onComplete }: { onComplete: (interest: InterestId) =>
           {index + 1} of {vibeCards.length}
         </div>
         <h2 className="h2">{copy.vibe.headline}</h2>
-        <p className="sub">{copy.vibe.sub}</p>
       </div>
+
+      <SwipeHint
+        left={copy.vibe.hintLeft}
+        leftSub={copy.vibe.hintLeftSub}
+        right={copy.vibe.hintRight}
+        rightSub={copy.vibe.hintRightSub}
+      />
 
       <div className="deck">
         <HeartBurst bursts={bursts} glows={glows} />
@@ -75,6 +82,7 @@ export function VibeDeck({ onComplete }: { onComplete: (interest: InterestId) =>
               offset={isTop ? offset : BEHIND_OFFSET}
               rotation={isTop ? rotation : 0}
               dragHandlers={dragHandlers}
+              entering={isTop && entering}
             />
           );
         })}
@@ -128,7 +136,6 @@ function VibeResult({
   if (computed) {
     const style = INTEREST_STYLE[computed];
     const Icon = style.icon;
-    const phrase = interestPhrase(computed) ?? "";
 
     return (
       <div className="panel fade-in">
@@ -138,10 +145,7 @@ function VibeResult({
         >
           <Icon size={26} color={style.color} />
         </div>
-        <h2 className="h3">
-          {(copy.vibe.resultHeadlineByInterest as Record<string, string>)[computed] ??
-            t(copy.vibe.resultHeadline, { interest: phrase })}
-        </h2>
+        <h2 className="h3">{copy.vibe.resultHeadline}</h2>
         <p className="sub" style={{ maxWidth: 280 }}>
           {copy.vibe.resultBody}
         </p>

@@ -29,16 +29,17 @@
     "sub": "Swipe right if you're into it, left if you're not",
     "stampRight": "YASSSS",
     "stampLeft": "NOT FOR ME",
-    "resultHeadline": "Got your vibe. Leaning {interest}.",
+    "resultHeadline": "Got your vibe.",
     "resultBody": "Just the essentials left, then we'll calculate your matches properly.",
     "resultCta": "Continue",
     "fallbackHeadline": "Didn't love any of those?",
     "fallbackSub": "No worries, just tap what excites you most, or learn about all of our courses.",
     "fallbackCta": "Discover All Courses",
     "fallbackCtaUrl": "https://www.lcbt.co.uk/courses/",
-    "resultHeadlineByInterest": {
-      "all": "Got your vibe. Loving all of it."
-    }
+    "hintLeft": "Swipe left",
+    "hintLeftSub": "Not for me",
+    "hintRight": "Swipe right",
+    "hintRightSub": "Into it"
   },
   "calculating": {
     "message": "Calculating your matches..."
@@ -67,7 +68,11 @@
       "bronze": "ALSO WORTH A LOOK"
     },
     "discoverCta": "Discover All Courses",
-    "discoverUrl": "https://www.lcbt.co.uk/courses/"
+    "discoverUrl": "https://www.lcbt.co.uk/courses/",
+    "hintLeft": "Swipe left",
+    "hintLeftSub": "Skip",
+    "hintRight": "Swipe right",
+    "hintRightSub": "Save"
   },
   "email": {
     "headline": "Almost there",
