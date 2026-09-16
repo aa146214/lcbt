@@ -481,7 +481,10 @@ button { font-family: inherit; }
      Tightened and lightened so more of the photograph shows: the plate
      earns its place by making the caption readable, not by filling space. */
   background: rgba(25, 6, 28, 0.62);
-  padding: 15px 20px 17px;
+  /* Roomy again now that the <h3>'s stray default margin is gone. That margin
+     was 44px of the old plate; with it removed this reads as deliberate
+     padding rather than the caption being crushed against the edges. */
+  padding: 20px 20px 22px;
 }
 .vibe-card__text {
   font-family: var(--font-display);
@@ -489,6 +492,9 @@ button { font-family: inherit; }
   font-weight: 700;
   line-height: 1.25;
   color: #fff;
+  /* It is an <h3>, so it arrived with the browser's default 1em margin top and
+     bottom — 44px of the plate's height was that, not the padding below. */
+  margin: 0;
   /* Cheap insurance for the lighter plate over a pale photograph. */
   text-shadow: 0 1px 8px rgba(25, 6, 28, 0.45);
 }

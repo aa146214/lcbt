@@ -97,9 +97,16 @@ three properties. Verified at runtime: `opacity` alone while a finger is down,
   already showing, so a transition had no previous state to run from and it
   simply appeared. Keyframes run when the element is inserted, which is what
   "popping in" needs.
-- **The caption plate is tighter and lighter** (0.72 to 0.62 opacity, padding
-  and type size down), so more of the photograph shows. A soft text-shadow
-  covers the lighter plate over a pale image.
+- **The caption plate is tighter and lighter**, so more of the photograph
+  shows: 0.72 to 0.62 opacity, type 25px to 22px. A soft text-shadow covers the
+  lighter plate over a pale image.
+
+  Most of the height turned out not to be padding at all. The caption is an
+  `<h3>` and still carried the browser's default 1em heading margin — 44px of
+  the original plate was margin nobody had written, which is why trimming
+  padding kept seeming not to help. With `margin: 0` on it, the plate can keep
+  roomy 20/22 padding and still come out a third shorter: 103px before, 70px
+  now, about 12% of the card.
 - **"Got your vibe."** no longer names the subject. "Leaning make-up" did not
   read as *a subject you might study*, and the sentence below already explains
   what happens next. This supersedes the "Loving all of it" variant.
