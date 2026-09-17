@@ -143,6 +143,51 @@ Exported at 720x960 rather than the 480x640 of the other six, which is roughly
 2x the card's rendered size and noticeably crisper on a phone. Worth
 re-exporting the rest from their originals so the deck matches.
 
+## Course card artwork, 17 Sept
+
+The client supplied seven 720x960 PNGs (a Dash collection, "Quiz end cards"),
+one per live course. They replace the flat category colour and its icon in the
+card head; the three cards with no artwork - register-interest and the two
+"explore all" collections - still fall back to it, so the head keeps its
+colour underneath as the loading state.
+
+Each frame has the subject name printed into the top of the image at an angle.
+That decides the crop: the head box is wider than the 3:4 source, so `cover`
+has to discard part of it, and `object-position: top` is the only anchor that
+keeps the badge. It holds when the head shrinks to 40% for the expanded state
+too.
+
+The burnt-in badge is also why the icon disc went rather than sitting on top
+of the photo: the image already names the subject, louder than the icon did.
+
+Converted to progressive JPEG at q86 - about 100 KB each against the PNGs'
+900 KB, matching the vibe deck's existing budget. The medal pill needed a
+short scrim under it, since it sits over whatever the photograph happens to be
+at the bottom right; the scrim is scoped to photo heads, because over a flat
+colour it just reads as a smudge.
+
+## "Tap for details" never worked
+
+Found while fitting the artwork. The card's own pointerup handler treats any
+small-movement release as a tap and toggles the details panel. Tapping the
+button therefore toggled twice - the deck opened it, the button's onClick
+closed it - and the card sat there looking broken.
+
+The `stopPropagation()` already on the button could never have helped:
+pointerup has finished bubbling long before the click is dispatched.
+
+The deck now ignores taps that land on a control (`button, a, input, select,
+textarea, [role=button]`) and lets the element's own handler run. Tapping the
+card anywhere else still toggles, which is how most people open it.
+
+## A disclaimer that travels with the content
+
+"*Requires a relevant Level 2 qualification" is keyed by level in `copy.json`
+(`results.levelNotes`) rather than hardcoded to a Level 3 test. Adding Level 4
+later is a line of JSON. The subject-specific wording stays in each course's
+entry requirements - the note is the always-visible caveat, the requirement is
+the detail behind it.
+
 ## No deck when there is nothing to match
 
 19+ with no prior qualification goes straight from the loading screen to email

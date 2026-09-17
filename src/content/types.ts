@@ -19,6 +19,10 @@ export interface Course {
    */
   available?: boolean;
   blurb: string;
+  /** Card artwork, with the subject name burnt into the top of the frame.
+   *  Absent on the register-interest and "explore all" cards, which fall back
+   *  to the flat category colour and its icon. */
+  image?: string;
   duration: string;
   /** Next intake, where the course page states one. */
   startDate?: string | null;

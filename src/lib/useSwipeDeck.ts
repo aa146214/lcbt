@@ -10,6 +10,12 @@ export interface DeckOffset {
 
 const REST: DeckOffset = { x: 0, y: 0, animating: false };
 
+/** Anything with its own click behaviour, sitting inside a card. */
+export function isControl(target: EventTarget | null) {
+  const el = target as HTMLElement | null;
+  return Boolean(el?.closest?.('button, a, input, select, textarea, [role="button"]'));
+}
+
 /**
  * Pointer capture is best-effort: it throws when the id is not an active
  * pointer, and that must never take the surrounding gesture down with it.
@@ -263,7 +269,12 @@ export function useSwipeDeck<T>({
 
       if (drag.current.axis === null || drag.current.moved < tapSlop) {
         setOffsetBoth({ ...REST, animating: true });
-        onTap?.(items[index], index);
+        // A tap that lands on a control belongs to that control. The card's
+        // own toggle would run first and then be undone by the button's
+        // click — which is why "Tap for details" appeared to do nothing.
+        // stopPropagation() on the click can't help: pointerup has already
+        // bubbled by then.
+        if (!isControl(e.target)) onTap?.(items[index], index);
         return;
       }
       if (dx > threshold) commit("right");

@@ -155,6 +155,7 @@ export function CourseCard({
   // A "see all" card is a route onwards, not a match, so it carries neither a
   // percentage nor a "matched you because" line.
   const isRealCourse = course.kind === "course";
+  const levelNote = (copy.results.levelNotes as Record<string, string>)[course.level];
 
   return (
     <article
@@ -167,12 +168,25 @@ export function CourseCard({
       )}
 
       <div
-        className={`course-card__head${expanded ? " course-card__head--compact" : ""}`}
+        className={[
+          "course-card__head",
+          expanded ? "course-card__head--compact" : "",
+          course.image ? "course-card__head--photo" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         style={{ background: cat.color }}
       >
-        <div className="course-card__mark">
-          <Icon size={38} color="#fff" />
-        </div>
+        {/* The artwork carries the subject name burnt into the top of the
+            frame, so it anchors to the top of the crop (see the CSS) and
+            replaces the icon rather than sitting under it. */}
+        {course.image ? (
+          <img className="course-card__img" src={course.image} alt="" draggable={false} />
+        ) : (
+          <div className="course-card__mark">
+            <Icon size={38} color="#fff" />
+          </div>
+        )}
         {isRealCourse && medal && (
           <div className="course-card__match" data-medal={medal}>
             <Medal size={13} />
@@ -188,6 +202,11 @@ export function CourseCard({
           {course.blurb}
           {!isRegisterInterest && goalClause ? ` ${goalClause}` : ""}
         </p>
+
+        {/* Keyed by level so the caveat travels with the content, not a
+            hardcoded rule. Level 3 needs a Level 2 behind it; the full
+            subject-specific wording is in the entry requirements below. */}
+        {isRealCourse && levelNote && <p className="course-card__note">{levelNote}</p>}
 
         {isRealCourse && reasoning && (
           <div className="course-card__reason">

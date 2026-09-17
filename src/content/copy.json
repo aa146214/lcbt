@@ -63,6 +63,9 @@
       "silver": "GREAT MATCH",
       "bronze": "ALSO WORTH A LOOK"
     },
+    "levelNotes": {
+      "Level 3": "*Requires a relevant Level 2 qualification"
+    },
     "discoverCta": "Discover All Courses",
     "discoverUrl": "https://www.lcbt.co.uk/courses/"
   },
