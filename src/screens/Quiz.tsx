@@ -9,6 +9,7 @@ const ACCENT: Record<StepKey, string> = {
   goal: "var(--pink)",
   priorQual: "var(--gold)",
   level: "var(--plum)",
+  subject: "var(--plum)",
 };
 
 export function Quiz({

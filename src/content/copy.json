@@ -103,6 +103,12 @@
     "change": "Plenty of career-changers start exactly here.",
     "unsure": "No pressure, this keeps your options open while you figure it out."
   },
+  "reasoningHeld": "you already hold a Level 2 in {subject}",
+  "subjectPhrase": {
+    "beauty": "beauty therapy",
+    "hair": "hairdressing",
+    "makeup": "hair & media make-up"
+  },
   "reasoningGoal": {
     "career": "you want to start a career",
     "self": "you want to start your own business",

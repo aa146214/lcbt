@@ -72,6 +72,10 @@
     "blurb": "Develop the professional skills you need to become a fully qualified beauty therapist. You'll learn complex treatments such as massage, body and facial electrical treatments and epilation.",
     "duration": "1 year, 2 days a week",
     "entryRequirements": "Level 2 Diploma in Beauty Therapy",
+    "entry": {
+      "level": "Level 2",
+      "subjects": ["beauty"]
+    },
     "funding": "Fully funded for 16-18; £3,345 for 19+ (loans available)",
     "fundingByAge": {
       "16-18": "Fully funded for 16-18",
@@ -93,6 +97,10 @@
     "blurb": "Build the advanced creative skills you need to become a professional stylist or make-up artist. You'll learn fashion and photographic make-up, creative hairdressing and special effects make-up.",
     "duration": "1 year, 2 days a week",
     "entryRequirements": "Level 2 qualification in Hair & Media Make-up or Beauty Therapy",
+    "entry": {
+      "level": "Level 2",
+      "subjects": ["makeup", "beauty"]
+    },
     "funding": "Fully funded for 16-18; £3,345 for 19+ (loans available)",
     "fundingByAge": {
       "16-18": "Fully funded for 16-18",
@@ -114,6 +122,10 @@
     "blurb": "Learn the professional skills you need to become a fully qualified hair stylist. You'll learn advanced cutting, styling and colouring techniques and gain the confidence to enter the industry as a qualified stylist or colour technician.",
     "duration": "1 year, 2 days a week",
     "entryRequirements": "Level 2 qualification in Hairdressing",
+    "entry": {
+      "level": "Level 2",
+      "subjects": ["hair"]
+    },
     "funding": "Fully funded for 16-18; £2,583 for 19+ (loans available)",
     "fundingByAge": {
       "16-18": "Fully funded for 16-18",
@@ -135,6 +147,10 @@
     "blurb": "Ideal for those already working as beauty therapists or in related sectors who want to increase their skills, services and earning potential. Teaches a range of popular advanced clinical techniques.",
     "duration": "18 weeks",
     "entryRequirements": "Level 3 Beauty Therapy qualification",
+    "entry": {
+      "level": "Level 3",
+      "subjects": ["beauty"]
+    },
     "funding": "£3,345 (loans available)",
     "fundingByAge": {
       "19+": "£3,345 (loans available)"

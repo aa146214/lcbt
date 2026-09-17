@@ -21,7 +21,10 @@ export function Results({
 }) {
   const cards = matches.courses;
   const isRegisterInterest = matches.type === "registerInterest";
-  const reasoning = useMemo(() => buildReasoning(answers), [answers]);
+  const reasoning = useMemo(
+    () => buildReasoning(answers, matches.basis),
+    [answers, matches.basis],
+  );
   const goalClause = answers.goal
     ? (copy.goalClause as Record<string, string>)[answers.goal] ?? null
     : null;

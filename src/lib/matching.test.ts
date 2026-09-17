@@ -8,6 +8,7 @@ import {
   getSteps,
   pruneAnswers,
 } from "./matching";
+import { buildReasoning } from "./reasoning";
 import { courses, vibeCards } from "../content";
 import type { Answers, InterestId } from "../content/types";
 
@@ -68,7 +69,7 @@ describe("getSteps — question gating", () => {
     expect(getSteps({ age: "19+" })).toEqual(["age", "goal", "priorQual"]);
   });
 
-  it("adds the level question only after a yes", () => {
+  it("adds the level and subject questions only after a yes", () => {
     expect(getSteps({ age: "19+", priorQual: "no" })).toEqual(["age", "goal", "priorQual"]);
     for (const age of ["16-18", "19+"] as const) {
       expect(getSteps({ age, priorQual: "yes" })).toEqual([
@@ -76,6 +77,7 @@ describe("getSteps — question gating", () => {
         "goal",
         "priorQual",
         "level",
+        "subject",
       ]);
     }
   });
@@ -308,5 +310,125 @@ describe("getPriorLevel — collapsing two questions onto the sheet's one axis",
 
   it("falls back to 'notsure' if the level question was somehow skipped", () => {
     expect(getPriorLevel({ age: "19+", priorQual: "yes" })).toBe("notsure");
+  });
+});
+
+/**
+ * Sheet 2, N10-N14: "Which area was it in?" — the question the sheet proposes
+ * but never branches on. Row 36 column F says why it is needed: the Level 3
+ * recommendations hold only "(until we know which level 2 they hold)".
+ */
+describe("sheet 2 N10-N14 — the subject of a prior Level 2", () => {
+  const holdsLevel2 = (subject: Answers["subject"], interest: InterestId): Answers => ({
+    interest,
+    age: "19+",
+    priorQual: "yes",
+    level: "Level 2",
+    subject,
+  });
+
+  it("stops offering a Level 3 the learner would be turned away from", () => {
+    // Level 2 in hairdressing, swiping towards beauty. Before the question
+    // existed this returned Level 3 Beauty Therapy, whose entry requirement
+    // is a Level 2 Diploma in Beauty Therapy.
+    expect(ids(holdsLevel2("hair", "beauty"))).not.toContain("l3-beauty");
+  });
+
+  it("falls back to the progression their own subject opens, not an empty deck", () => {
+    const result = getMatches(holdsLevel2("hair", "beauty"));
+    expect(result.type).toBe("courses");
+    expect(result.courses.map((c) => c.id)).toEqual(["l3-hair"]);
+  });
+
+  it("resolves 'I love all of it' to what their Level 2 actually opens", () => {
+    // Rows 59-62, the 19+ "all" row, offers beauty therapy and hairdressing.
+    expect(ids(holdsLevel2("hair", "all"))).toEqual(["l3-hair"]);
+    expect(ids(holdsLevel2("beauty", "all"))).toEqual(["l3-beauty"]);
+  });
+
+  it("does the same to row 36, which is the one the sheet flagged", () => {
+    // Row 36 offers a 16-18 all three Level 3s, noting "(until we know which
+    // level 2 they hold)". Now we know.
+    const all = (subject: Answers["subject"]) =>
+      ids({ interest: "all", age: "16-18", priorQual: "yes", level: "Level 2", subject });
+    expect(all(undefined)).toEqual(["l3-mua", "l3-beauty", "l3-hair"]);
+    expect(all("hair")).toEqual(["l3-hair"]);
+    expect(all("beauty")).toEqual(["l3-mua", "l3-beauty"]);
+    expect(all("makeup")).toEqual(["l3-mua"]);
+  });
+
+  it("honours a Level 2 that admits more than one Level 3", () => {
+    // Hair & Media Make-Up takes a Level 2 in either HMM or beauty therapy.
+    expect(ids(holdsLevel2("beauty", "makeup"))).toContain("l3-mua");
+    expect(ids(holdsLevel2("makeup", "makeup"))).toContain("l3-mua");
+    expect(ids(holdsLevel2("hair", "makeup"))).not.toContain("l3-mua");
+  });
+
+  it("leaves the recommendations alone for a subject we don't teach", () => {
+    const other = ids(holdsLevel2("other", "beauty"));
+    const unasked = ids({ interest: "beauty", age: "19+", priorQual: "yes", level: "Level 2" });
+    expect(other).toEqual(unasked);
+  });
+
+  it("keeps the answer out of the matching once it is unreachable", () => {
+    // Back to "no prior qualification" — the subject must not keep steering.
+    const pruned = pruneAnswers({
+      interest: "beauty",
+      age: "19+",
+      priorQual: "no",
+      level: "Level 2",
+      subject: "hair",
+    });
+    expect(pruned.subject).toBeUndefined();
+    expect(pruned.level).toBeUndefined();
+  });
+});
+
+describe("Level 4 sits on a Level 3, not a Level 2", () => {
+  it("is offered to a Level 3 holder", () => {
+    expect(ids({ interest: "beauty", age: "19+", priorQual: "yes", level: "Level 3" })).toContain(
+      "l4-aesthetic",
+    );
+  });
+
+  it("is withheld from a Level 2 holder, whichever subject they hold", () => {
+    for (const subject of ["beauty", "hair", "makeup", "other"] as const) {
+      expect(
+        ids({ interest: "beauty", age: "19+", priorQual: "yes", level: "Level 2", subject }),
+      ).not.toContain("l4-aesthetic");
+    }
+  });
+
+  it("states a Level 3 entry requirement, which is what the guard reads", () => {
+    expect(courses["l4-aesthetic"].entry).toEqual({ level: "Level 3", subjects: ["beauty"] });
+  });
+});
+
+describe("the reason line follows whatever actually chose the deck", () => {
+  const heldHairLeaningBeauty: Answers = {
+    interest: "beauty",
+    age: "19+",
+    goal: "career",
+    priorQual: "yes",
+    level: "Level 2",
+    subject: "hair",
+  };
+
+  it("explains a qualification-led deck by the qualification", () => {
+    const result = getMatches(heldHairLeaningBeauty);
+    expect(result.basis).toBe("qualification");
+    // Saying "you're into beauty therapy" would explain a card we just removed.
+    expect(buildReasoning(heldHairLeaningBeauty, result.basis)).toBe(
+      "you already hold a Level 2 in hairdressing, you're 19+ and you want to start a career",
+    );
+  });
+
+  it("still leads with the swipes when they are what chose the deck", () => {
+    const answers: Answers = { ...heldHairLeaningBeauty, interest: "hair" };
+    const result = getMatches(answers);
+    expect(result.basis).toBe("interest");
+    expect(buildReasoning(answers, result.basis)).toBe(
+      "you're into hairdressing, you're 19+ and you want to start a career",
+    );
   });
 });

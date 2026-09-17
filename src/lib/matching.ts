@@ -9,6 +9,7 @@ import type {
   MatchRule,
   PriorLevel,
   StepKey,
+  SubjectId,
   VibeCard,
 } from "../content/types";
 
@@ -89,7 +90,7 @@ export function getSteps(answers: Answers): StepKey[] {
 export function pruneAnswers(answers: Answers): Answers {
   const live = new Set<string>(getSteps(answers));
   const next: Answers = { interest: answers.interest };
-  for (const key of ["age", "goal", "priorQual", "level"] as const) {
+  for (const key of ["age", "goal", "priorQual", "level", "subject"] as const) {
     if (live.has(key) && answers[key] !== undefined) {
       (next as Record<string, unknown>)[key] = answers[key];
     }
@@ -133,6 +134,35 @@ function ruleMatches(rule: MatchRule, age: string, priorLevel: PriorLevel): bool
   return true;
 }
 
+/**
+ * Whether this person's own qualification would get them onto the course.
+ *
+ * The sheet keys its Level 3 recommendations off what somebody swiped, never
+ * off what they already hold, and row 36 admits it: "(until we know which
+ * level 2 they hold)". Now that we ask, we can stop recommending a Level 3
+ * they would be turned away from.
+ *
+ * The subject test is deliberately narrow — it applies only where the sheet's
+ * note does, to somebody whose highest qualification is a Level 2. Rows 69-72
+ * offer a Level 3 holder a sideways move into a different Level 3, and it is
+ * the Level 2 underneath that admits them; testing those against this rule
+ * would throw away a recommendation the college does make.
+ */
+function admits(course: Course, priorLevel: PriorLevel, subject?: SubjectId): boolean {
+  const entry = course.entry;
+  if (!entry) return true;
+
+  // Level 4 sits on a Level 3. Someone who told us they hold a Level 2 is
+  // not there yet, whatever they swiped.
+  if (entry.level === "Level 3" && priorLevel === "Level 2") return false;
+
+  if (priorLevel !== "Level 2") return true;
+  // A qualification in something we don't teach tells us nothing either way,
+  // so it leaves the recommendations exactly as they were.
+  if (!subject || subject === "other") return true;
+  return entry.subjects.includes(subject);
+}
+
 export function getMatches(answers: Answers): MatchResult {
   const interest: InterestId = answers.interest ?? "all";
   const age = answers.age ?? "16-18";
@@ -140,13 +170,27 @@ export function getMatches(answers: Answers): MatchResult {
 
   const rule = matching.rules.find((r) => ruleMatches(r, age, priorLevel));
 
-  const ids = rule?.results[interest] ?? matching.fallback.ids;
-  const resolved: Course[] = ids
-    .map((id) => courses[id])
-    .filter((c): c is Course => Boolean(c))
-    // A course marked unavailable is dropped wherever it appears, so taking
-    // something out of the catalogue never leaves a rule recommending it.
-    .filter((c) => c.available !== false);
+  const resolve = (want: InterestId): Course[] =>
+    (rule?.results[want] ?? matching.fallback.ids)
+      .map((id) => courses[id])
+      .filter((c): c is Course => Boolean(c))
+      // A course marked unavailable is dropped wherever it appears, so taking
+      // something out of the catalogue never leaves a rule recommending it.
+      .filter((c) => c.available !== false)
+      .filter((c) => admits(c, priorLevel, answers.subject));
+
+  let resolved = resolve(interest);
+  let basis: MatchResult["basis"] = "interest";
+
+  /* Eligibility can empty a row that had a course in it: a Level 2
+     hairdresser who swiped towards beauty is offered Level 3 Beauty Therapy
+     and nothing else, and they cannot join it. Sending them away empty-handed
+     would be worse than what we had, so fall back to the rule's own row for
+     the subject they actually hold — which is the progression open to them. */
+  if (resolved.length === 0 && answers.subject && answers.subject !== "other") {
+    resolved = resolve(answers.subject);
+    if (resolved.length > 0) basis = "qualification";
+  }
 
   // Everything the rule offered is unavailable — fall through to registering
   // interest rather than showing an empty deck.
@@ -155,6 +199,7 @@ export function getMatches(answers: Answers): MatchResult {
       type: "registerInterest",
       ruleId: rule?.id ?? "fallback",
       courses: [courses["register-interest"]],
+      basis,
     };
   }
 
@@ -164,7 +209,7 @@ export function getMatches(answers: Answers): MatchResult {
       ? "registerInterest"
       : "courses");
 
-  return { type, ruleId: rule?.id ?? "fallback", courses: resolved };
+  return { type, ruleId: rule?.id ?? "fallback", courses: resolved, basis };
 }
 
 /**

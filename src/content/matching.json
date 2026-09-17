@@ -35,7 +35,7 @@
     },
     {
       "id": "16-18-level2",
-      "note": "Sheet rows 29-36: 16-18 holding a Level 2 -> recommend Level 3. Not reachable while the prior-qualification question is 19+ only (see questions.json).",
+      "note": "Sheet rows 29-36: 16-18 holding a Level 2 -> recommend Level 3. Row 36 recommends all three Level 3s only \"until we know which level 2 they hold\" - the subject question now narrows this to the ones they are eligible for (see admits() in matching.ts).",
       "when": {
         "age": "16-18",
         "priorLevel": [

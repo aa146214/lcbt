@@ -188,6 +188,68 @@ later is a line of JSON. The subject-specific wording stays in each course's
 entry requirements - the note is the always-visible caveat, the requirement is
 the detail behind it.
 
+## "Which area was it in?", 17 Sept
+
+The client spotted a question missing after the qualification one. It is real:
+sheet 2 of the logic workbook, N10-N14, has it verbatim - Beauty Therapy /
+Hairdressing / Hair & Media Make-Up / Another subject. It never got built
+because it sits under an open note to themselves, "do we need to enhance qual
+question?", and the main logic sheet never branches on the answer. It is not
+in the screen content doc either.
+
+The main sheet does admit the gap, twice: row 36 column F, "(until we know
+which level 2 they hold)", and row 33 column F, "will then see pre reqs per
+course".
+
+What it was costing: every Level 3 recommendation was keyed off what somebody
+swiped, never off the subject they hold. A Level 2 hairdresser who swiped
+towards beauty was shown Level 3 Beauty Therapy as their best match, and its
+entry requirement is a Level 2 Diploma in Beauty Therapy. The disclaimer added
+earlier the same day was papering over exactly this.
+
+The entry requirements now exist twice in `courses.json`: the prose the card
+shows, and an `entry` block the matcher reads. Two copies of one fact is a
+liability, but parsing "Level 2 qualification in Hair & Media Make-up or
+Beauty Therapy" into a rule at runtime is a worse one, and the pair sit on
+adjacent lines so a change to either is hard to miss.
+
+### Why the subject test is narrow
+
+It applies only to somebody whose highest qualification is a Level 2 - exactly
+where the sheet's own note applies. Rows 69-72 offer a Level 3 holder a
+sideways move into a different Level 3, and it is the Level 2 underneath that
+admits them; testing those rows the same way would throw away recommendations
+the college does make.
+
+### Why filtering alone was not enough
+
+Dropping ineligible courses can empty a row that had something in it. The
+Level 2 hairdresser above is offered Level 3 Beauty Therapy and nothing else,
+so filtering leaves them with an empty deck and a register-interest screen -
+worse than the wrong recommendation, because Level 3 Hairdressing is right
+there and they qualify for it.
+
+So when eligibility empties a deck, the rule's own row for the subject they
+hold is used instead. That changes what the "Matched you because" line has to
+say: leading with "you're into beauty therapy" would explain a card that is no
+longer in the deck. `MatchResult.basis` records which of the two chose the
+deck, and the line follows it - "you already hold a Level 2 in hairdressing".
+
+### Level 4
+
+Guarded on the level as well: `l4-aesthetic` needs a Level 3 behind it, and
+row 51 offers it to a Level 2 holder. That row is currently dormant, because
+it only fires when short courses are switched on and they are not - so this
+was a latent bug rather than a live one, and the guard is there for whenever
+short courses come back.
+
+### Not done
+
+Sheet 2 N4-N8 also proposes merging "have you studied before?" and "what level
+do you hold?" into one question - None / Level 2 / Level 3 / Not sure. That
+would keep the quiz at four questions instead of five. It is a separate change
+to the client's own copy and worth asking them about first.
+
 ## No deck when there is nothing to match
 
 19+ with no prior qualification goes straight from the loading screen to email
