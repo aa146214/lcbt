@@ -10,6 +10,9 @@ export interface DeckOffset {
    *  front-loaded curve than the settle and the drag spring-back, which share
    *  the same class and should stay snappy. */
   flying?: boolean;
+  /** How long this particular exit should take. Scaled to the distance left to
+   *  travel, so the card always leaves at the same speed. */
+  flyMs?: number;
 }
 
 const REST: DeckOffset = { x: 0, y: 0, animating: false };
@@ -38,10 +41,24 @@ function capture(e: React.PointerEvent, mode: "set" | "release") {
  *  strip reads as a card underneath rather than as legible duplicate text. */
 export const BEHIND_OFFSET: DeckOffset = { x: 0, y: 8, animating: false };
 
-/** How long a liked card takes to clear the screen. */
+/** How far a card travels on its way out. It only has to beat the card's own
+ *  width - 394px on the widest shell - to be gone; anything past that is
+ *  animation nobody sees. */
+const FLY_DISTANCE = 480;
+
+/** How long a full-distance exit takes. A button press is exactly that case:
+ *  it starts from dead centre, so it has the whole width to cross. A drag has
+ *  already covered part of the journey and gets a proportionally shorter
+ *  duration, which is what stops the buttons looking faster than a swipe -
+ *  the card leaves at one speed however it was sent. */
+const EXIT_MS = 520;
+
+/** When the departing card is unmounted and the next one promoted. Both have
+ *  to outlast the exit itself, which clears the screen at about 240ms in the
+ *  worst case (a button press, travelling the full distance). */
 const FLY_MS = 300;
-/** A skip has no burst to wait for, so it gets out of the way faster. */
-const FLY_MS_SKIP = 210;
+/** A skip has no burst to wait for, so it promotes as soon as the exit allows. */
+const FLY_MS_SKIP = 290;
 /** How long the card behind takes to settle into the top slot. */
 const PROMOTE_MS = 340;
 
@@ -138,8 +155,17 @@ export function useSwipeDeck<T>({
       if (busy.current || index >= items.length) return;
       cancelHint();
       busy.current = true;
-      const flyX = direction === "right" ? 600 : -600;
-      setOffsetBoth({ x: flyX, y: offsetRef.current.y - 40, animating: true, flying: true });
+      const flyX = direction === "right" ? FLY_DISTANCE : -FLY_DISTANCE;
+      const flyMs = Math.round(
+        (EXIT_MS * Math.abs(flyX - offsetRef.current.x)) / FLY_DISTANCE,
+      );
+      setOffsetBoth({
+        x: flyX,
+        y: offsetRef.current.y - 40,
+        animating: true,
+        flying: true,
+        flyMs,
+      });
       onSwipe?.(items[index], direction, index);
       /* The card behind sits BEHIND_OFFSET.y lower. Easing it up into the top
          slot is what makes the stack settle rather than jump-cut. */
@@ -153,7 +179,7 @@ export function useSwipeDeck<T>({
         }, PROMOTE_MS);
       };
 
-      const flyMs = direction === "right" ? FLY_MS : FLY_MS_SKIP;
+      const promoteMs = direction === "right" ? FLY_MS : FLY_MS_SKIP;
       window.setTimeout(() => {
         setIndex((i) => {
           const next = i + 1;
@@ -177,7 +203,7 @@ export function useSwipeDeck<T>({
           // Nothing to wait for on a skip.
           settle();
         }
-      }, flyMs);
+      }, promoteMs);
     },
     [index, items, onSwipe, onExhausted],
   );

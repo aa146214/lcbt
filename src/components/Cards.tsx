@@ -10,6 +10,10 @@ import type { DeckOffset } from "../lib/useSwipeDeck";
 function cardStyle(offset: DeckOffset, rotation: number): React.CSSProperties {
   return {
     transform: `translate(${offset.x}px, ${offset.y}px) rotate(${rotation}deg)`,
+    /* Only an exit sets its own duration, because only an exit varies: it is
+       scaled to how far the card still has to travel. The shadow rides along
+       on the same timing, which is moot for a card that is leaving. */
+    ...(offset.flying && offset.flyMs ? { transitionDuration: `${offset.flyMs}ms` } : {}),
   };
 }
 

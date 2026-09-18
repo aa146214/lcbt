@@ -279,6 +279,29 @@ to 210ms. That is still the fly, not the hold the client objected to on skips;
 otherwise reset it - the same trap that killed every transform transition
 earlier in the project.
 
+### Why the buttons still felt faster
+
+Client, next day: still too fast on the heart and X buttons. Measuring by
+starting position showed why - the duration was fixed at 0.42s however far the
+card had to go, and a button press starts from dead centre, so it covers the
+most ground in the same time:
+
+| sent by | distance | speed |
+| --- | --- | --- |
+| button | 600px | 1429px/s |
+| finger, just past threshold | 490px | 1167px/s |
+| finger, dragged well across | 400px | 952px/s |
+
+So the buttons were genuinely half again as fast as a drag, and no single
+duration fixes that. The exit duration is now scaled to the distance left to
+travel, which holds the speed constant however the card was sent.
+
+The fly distance dropped from 600px to 480px at the same time: a card is gone
+once it beats its own width (394px on the widest shell), and the rest was
+animation nobody sees - it just made the numbers harder to reason about.
+A full-distance exit is 520ms and clears the screen at about 240ms, against
+139ms before. The skip promote timer moved 210ms -> 290ms to stay clear of it.
+
 ## No deck when there is nothing to match
 
 19+ with no prior qualification goes straight from the loading screen to email
