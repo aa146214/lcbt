@@ -6,6 +6,10 @@ export interface DeckOffset {
   x: number;
   y: number;
   animating: boolean;
+  /** Set only while a card is leaving the deck. The exit gets a slower, less
+   *  front-loaded curve than the settle and the drag spring-back, which share
+   *  the same class and should stay snappy. */
+  flying?: boolean;
 }
 
 const REST: DeckOffset = { x: 0, y: 0, animating: false };
@@ -37,7 +41,7 @@ export const BEHIND_OFFSET: DeckOffset = { x: 0, y: 8, animating: false };
 /** How long a liked card takes to clear the screen. */
 const FLY_MS = 300;
 /** A skip has no burst to wait for, so it gets out of the way faster. */
-const FLY_MS_SKIP = 170;
+const FLY_MS_SKIP = 210;
 /** How long the card behind takes to settle into the top slot. */
 const PROMOTE_MS = 340;
 
@@ -135,7 +139,7 @@ export function useSwipeDeck<T>({
       cancelHint();
       busy.current = true;
       const flyX = direction === "right" ? 600 : -600;
-      setOffsetBoth({ x: flyX, y: offsetRef.current.y - 40, animating: true });
+      setOffsetBoth({ x: flyX, y: offsetRef.current.y - 40, animating: true, flying: true });
       onSwipe?.(items[index], direction, index);
       /* The card behind sits BEHIND_OFFSET.y lower. Easing it up into the top
          slot is what makes the stack settle rather than jump-cut. */

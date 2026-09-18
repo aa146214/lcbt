@@ -373,6 +373,19 @@ button { font-family: inherit; }
      is down the card must track it exactly. */
   transition: transform 0.34s var(--ease-out), box-shadow 0.34s var(--ease-out);
 }
+/* A card leaving the deck. --ease-out is heavily front-loaded, which suits the
+   settle but threw the card off the screen in about 64ms — too quick to read
+   as a movement at all. This curve is closer to even, so the card is on screen
+   for roughly twice as long on its way out.
+
+   It must stay ahead of the unmount in useSwipeDeck: the card is removed once
+   FLY_MS_SKIP has passed, so anything slower than that would visibly cut the
+   exit short. box-shadow is restated because this shorthand would otherwise
+   reset the transition the rule above gives it. */
+.card--flying {
+  transition: transform 0.42s cubic-bezier(0.3, 0.5, 0.3, 1),
+    box-shadow 0.34s var(--ease-out);
+}
 /* After a right-swipe the hearts keep rising for about a second. Without this
    the next photograph is already on screen underneath them, so the burst looks
    like it belongs to a card the person hasn't reached yet. */

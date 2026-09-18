@@ -250,6 +250,35 @@ do you hold?" into one question - None / Level 2 / Level 3 / Not sure. That
 would keep the quiz at four questions instead of five. It is a separate change
 to the client's own copy and worth asking them about first.
 
+## Slowing the card exit, 18 Sept
+
+Client: "the cards are moving really fast, can we slow them down?"
+
+Measuring it first was worth it, because the obvious reading was wrong. The
+exit transition is 0.34s, but `--ease-out` is `cubic-bezier(0.2, 0.8, 0.2, 1)`,
+which front-loads almost all the travel - and a card only has to cross its own
+width (394px on the widest shell) to be gone, not the full 600px it animates
+to. It cleared the screen in **64ms**. That is the whole of what anyone sees of
+a swipe.
+
+A first guess that the card was being cut off mid-flight was also wrong: it is
+unmounted at FLY_MS (300ms) or FLY_MS_SKIP, both long after it has left.
+
+The exit now has its own class rather than sharing `.card--animating` with the
+settle and the drag spring-back, which should stay immediate -
+`cubic-bezier(0.3, 0.5, 0.3, 1)` over 0.42s, closer to even, clearing the
+screen at about 139ms.
+
+That number is a constraint, not a preference: the card is removed from the DOM
+once the fly timer elapses, so the exit has to finish before it. The skip timer
+was 170ms, which left 31ms of headroom - too thin across devices - so it went
+to 210ms. That is still the fly, not the hold the client objected to on skips;
+`REVEAL_DELAY_MS` remains 0 in that direction.
+
+`.card--flying` restates `box-shadow` because a `transition` shorthand would
+otherwise reset it - the same trap that killed every transform transition
+earlier in the project.
+
 ## No deck when there is nothing to match
 
 19+ with no prior qualification goes straight from the loading screen to email

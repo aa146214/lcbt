@@ -29,6 +29,7 @@ function cardClass(
     extra,
     isTop ? "card--top" : "card--behind",
     offset.animating ? "card--animating" : "",
+    offset.flying ? "card--flying" : "",
     isTop && entering ? "card--entering" : "",
   ]
     .filter(Boolean)
