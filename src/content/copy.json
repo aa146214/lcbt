@@ -30,7 +30,7 @@
     "stampRight": "YASSSS",
     "stampLeft": "NOT FOR ME",
     "resultHeadline": "Got your vibe.",
-    "resultBody": "Just the essentials left, then we'll calculate your matches properly.",
+    "resultBody": "Almost there, we just need a few more details to get your perfect course match.",
     "resultCta": "Continue",
     "fallbackHeadline": "Didn't love any of those?",
     "fallbackSub": "No worries, just tap what excites you most, or learn about all of our courses.",
@@ -78,7 +78,7 @@
     "smallPrint": "We'll use your email to send the course matches you asked for. Marketing is opt-in and you can unsubscribe at any time.",
     "errorInvalid": "That doesn't look like a valid email address.",
     "errorSend": "Something went wrong sending your matches. Please try again.",
-    "consentLabel": "Email me about open days, new courses and offers at LCBT.",
+    "consentLabel": "Email me about open days, new courses and events at LCBT.",
     "ctaRegister": "Register my interest",
     "smallPrintRegister": "We'll only use your email to let you know when something suitable opens up. Marketing is opt-in and you can unsubscribe at any time."
   },
