@@ -1,16 +1,20 @@
 /**
  * LEAD SUBMISSION
  * ---------------
- * Posts the captured email plus the person's answers and saved courses to an
- * endpoint. Set VITE_LEAD_ENDPOINT to wire it up — a WordPress REST route,
- * a form plugin, or whatever the CRM eventually exposes.
+ * Posts the captured email plus the person's answers and saved courses to
+ * this project's own `/api/lead`, which writes them to the database. Same
+ * origin, so there is no CORS to negotiate and no credential in the bundle.
  *
- * With no endpoint configured (local dev), submissions are stored in
- * localStorage under `lcbt.leads` so the flow stays testable end to end.
+ * VITE_LEAD_ENDPOINT overrides the destination if submissions should go
+ * somewhere else entirely — a WordPress REST route, say.
+ *
+ * Under `vite dev` there is no function to post to, so submissions are stored
+ * in localStorage under `lcbt.leads` and the flow stays testable end to end.
+ * Run `vercel dev` instead to exercise the real endpoint.
  */
 import type { Answers, Course } from "../content/types";
 
-const ENDPOINT = import.meta.env.VITE_LEAD_ENDPOINT ?? "";
+const ENDPOINT = import.meta.env.VITE_LEAD_ENDPOINT ?? (import.meta.env.DEV ? "" : "/api/lead");
 
 export interface Lead {
   email: string;

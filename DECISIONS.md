@@ -451,6 +451,50 @@ for, but updates are marketing, which under UK PECR generally needs its own
 opt-in. The small print now says exactly that. **Worth confirming with whoever
 owns compliance**, and with the CRM, which may expect its own consent field.
 
+## Where submissions are stored, 22 Sept
+
+A Neon Postgres database (Vercel Marketplace, EU region), written to by a
+serverless function in this project at `/api/lead`.
+
+The earlier recommendation here was app -> WordPress -> Umbraco, on the
+reasoning that the app would be served from the WordPress domain and the call
+would be same-origin. That premise is gone: the app is its own Vercel
+deployment on quiz.lcbt.co.uk. A browser POST to www.lcbt.co.uk is now
+cross-origin, so that route would mean asking LCBT to configure CORS before
+anything worked, and any credential would sit in the bundle. A function in this
+project restores the property the original plan wanted - the browser posts to
+its own origin, and the forwarding happens server-side.
+
+**The database is not a substitute for the CRM, it is what stops us waiting for
+it.** There is still no endpoint to forward to, and quite possibly no system
+behind it yet. Leads land in Postgres now; `forwarded_at` stays null until
+there is somewhere to send them, and is what makes replaying the backlog
+possible. Without it every lead captured before the CRM exists is lost.
+
+Some smaller calls, each of which could reasonably have gone the other way:
+
+- **Answers and course ids are jsonb, not columns.** The questions live in
+  questions.json and change without a migration; pinning them to a schema
+  would only go stale. They are also written with an explicit `::jsonb` cast
+  rather than handed to the driver to map, which removes a layer between the
+  payload and the column.
+- **Email is not unique.** Someone retaking the quiz is a real second lead.
+  The index on `lower(email)` exists so "everything for this person" is quick,
+  which is also what a deletion request needs.
+- **`marketing_consent` must be an actual boolean.** The validator rejects
+  "yes" and 1 rather than coercing them. Consent is the one field where a
+  truthy value quietly becoming true is a compliance problem.
+- **Both timestamps are kept.** A wrong device clock should not become the only
+  record of when a submission happened, and an unparseable one is stored as
+  null rather than rejecting the lead.
+- **The email address is never logged.** Project logs are readable by anyone
+  with access; the row id is enough to find it.
+
+Note for handover: the payload is personal data with LCBT as controller. It is
+currently landing in a database on Wirebox's Vercel account, which makes
+Wirebox a processor - worth having agreed in writing, along with a retention
+period, rather than discovered later.
+
 ## CRM
 
 <a id="crm"></a>Their stack is WordPress, feeding an "Umbraco CRM". Worth
