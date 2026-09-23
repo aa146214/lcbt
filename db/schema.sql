@@ -34,8 +34,17 @@ create table if not exists leads (
 
   -- Set once the lead has been handed to LCBT's CRM. Null means outstanding,
   -- which is what makes it possible to collect now and replay later.
-  forwarded_at       timestamptz
+  forwarded_at       timestamptz,
+
+  -- What actually left the building. Null means that email did not send, so
+  -- a resend can find it; a lead is never rejected for an email failure.
+  staff_emailed_at   timestamptz,
+  learner_emailed_at timestamptz
 );
+
+-- Added after the table shipped, so existing databases get them too.
+alter table leads add column if not exists staff_emailed_at   timestamptz;
+alter table leads add column if not exists learner_emailed_at timestamptz;
 
 -- Newest first is how anyone will read this table.
 create index if not exists leads_created_at_idx on leads (created_at desc);

@@ -495,6 +495,44 @@ currently landing in a database on Wirebox's Vercel account, which makes
 Wirebox a processor - worth having agreed in writing, along with a retention
 period, rather than discovered later.
 
+## Email, 23 Sept
+
+Mailgun, sending two messages per submission: a notification to LCBT and the
+learner's own matches. The second one has been promised on the confirmation
+screen ("Check your inbox!") since the first build, with nothing behind it.
+
+**Both are sent after the row is written, and neither can fail the request.**
+Email is the part most likely to break - an unverified domain, a bounced
+address, Mailgun having a bad day - and none of that is worth losing an
+enquiry over. `staff_emailed_at` and `learner_emailed_at` record what actually
+left; null is the marker that makes a resend findable later, the same trick as
+`forwarded_at`.
+
+They are awaited rather than fired and forgotten. A serverless function can be
+frozen the moment it responds, and an unawaited send would simply never leave.
+
+**Course details are looked up server-side**, from the same `courses.json` the
+app renders, never taken from the request. The endpoint is public, so anything
+can post a course id; an email going out under LCBT's name must not contain a
+title or a link that came from outside. Unknown ids are dropped rather than
+echoed, and `_source` is filtered out so provenance notes can never be mailed
+as a course.
+
+Smaller calls:
+
+- **Region is an environment variable, defaulting to EU.** Mailgun runs
+  separate US and EU stacks with different hostnames, and an account on one
+  returns 401 against the other - a failure that reads as a bad key. The
+  sending domain sits alongside UK learner data, so EU is the default.
+- **No SDK.** It is one form-encoded POST; a dependency for that is a
+  dependency to keep patched for nothing.
+- **The learner email goes out regardless of marketing consent**, because it
+  is the thing they asked for on the form. The footer says which is which
+  rather than leaving them wondering why LCBT is in their inbox - and it is
+  the only email a non-consenter gets.
+- **The Level 3 caveat travels into the email.** Someone reading it a week
+  later should not be the last to learn they need a Level 2 first.
+
 ## CRM
 
 <a id="crm"></a>Their stack is WordPress, feeding an "Umbraco CRM". Worth

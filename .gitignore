@@ -9,3 +9,9 @@ deploy.log
 
 .vercel
 .env*
+
+# Agent skill docs installed by the Neon marketplace integration. Vendor
+# tooling, not part of the app.
+.agents
+.claude/skills
+skills-lock.json

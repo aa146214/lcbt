@@ -13,7 +13,9 @@
  * once there is somewhere to replay them to.
  */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { neon } from "@neondatabase/serverless";
+import { neon, type NeonQueryFunction } from "@neondatabase/serverless";
+import { mailgunConfig, send } from "../server/mailgun.js";
+import { learnerEmail, staffEmail, type LeadForEmail } from "../server/leadEmails.js";
 
 /** Generous for a real submission, mean enough to stop anyone posting a book. */
 const MAX_IDS = 50;
@@ -138,10 +140,74 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     `;
     // Deliberately not logging the email address: these logs are readable by
     // anyone with project access and the id is enough to find the row.
-    console.info(`[lead] stored #${rows[0]?.id} (${lead.leadType})`);
+    const id = rows[0]?.id;
+    console.info(`[lead] stored #${id} (${lead.leadType})`);
+
+    /* Only now, with the row safely written. Email is the part most likely to
+       fail — an unverified domain, a bounced recipient, Mailgun having a bad
+       day — and none of that is worth losing an enquiry over. Awaited rather
+       than fired and forgotten, because a serverless function can be frozen
+       the moment it responds and the send would never leave. */
+    await notify(sql, id, lead);
+
     return res.status(201).json({ ok: true });
   } catch (err) {
     console.error("[lead] insert failed:", err);
     return res.status(500).json({ error: "could not store lead" });
+  }
+}
+
+/**
+ * Sends the two emails and records what happened. Failures are logged and
+ * swallowed: the lead is already stored, and `staff_emailed_at` /
+ * `learner_emailed_at` staying null is the record that one did not go out,
+ * which is what makes a resend possible later.
+ */
+async function notify(
+  sql: NeonQueryFunction<false, false>,
+  id: unknown,
+  lead: Lead,
+): Promise<void> {
+  const config = mailgunConfig();
+  if (!config) {
+    console.warn("[lead] Mailgun not configured — no email sent");
+    return;
+  }
+
+  const staffTo = (process.env.LEAD_EMAIL_TO ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const forEmail: LeadForEmail = {
+    email: lead.email,
+    leadType: lead.leadType,
+    marketingConsent: lead.marketingConsent,
+    answers: (lead.answers ?? {}) as Record<string, unknown>,
+    savedCourseIds: lead.savedCourseIds,
+    matchedCourseIds: lead.matchedCourseIds,
+    submittedAt: lead.submittedAt,
+  };
+
+  const [staff, learner] = await Promise.allSettled([
+    staffTo.length
+      ? send(config, { to: staffTo, ...staffEmail(forEmail) })
+      : Promise.reject(new Error("LEAD_EMAIL_TO is not set")),
+    send(config, { to: [lead.email], ...learnerEmail(forEmail) }),
+  ]);
+
+  if (staff.status === "rejected") console.error("[lead] staff email failed:", staff.reason);
+  if (learner.status === "rejected") console.error("[lead] learner email failed:", learner.reason);
+
+  try {
+    await sql`
+      update leads set
+        staff_emailed_at   = case when ${staff.status === "fulfilled"} then now() else staff_emailed_at end,
+        learner_emailed_at = case when ${learner.status === "fulfilled"} then now() else learner_emailed_at end
+      where id = ${id as number}
+    `;
+  } catch (err) {
+    // The emails went; only the bookkeeping failed. Not worth a 500.
+    console.error("[lead] could not record email status:", err);
   }
 }
