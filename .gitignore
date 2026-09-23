@@ -15,3 +15,6 @@ deploy.log
 .agents
 .claude/skills
 skills-lock.json
+
+.vercel
+.env*

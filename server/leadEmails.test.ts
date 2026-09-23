@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { learnerEmail, staffEmail, type LeadForEmail } from "./leadEmails";
+import { learnerEmail, readableAnswers, staffEmail, ukTime, type LeadForEmail } from "./leadEmails";
 
 const lead = (over: Partial<LeadForEmail> = {}): LeadForEmail => ({
   email: "someone@example.com",
@@ -64,8 +64,42 @@ describe("staff email", () => {
     expect(m.html).toContain("&lt;img");
   });
 
-  it("includes every answer given, not a summary", () => {
+  it("shows the question they were asked and the option they picked", () => {
     const m = staffEmail(lead({ answers: { age: "16-18", goal: "career", subject: "beauty" } }));
-    for (const v of ["16-18", "career", "beauty"]) expect(m.text).toContain(v);
+    expect(m.text).toContain("How old will you be when you start the course?");
+    expect(m.text).toContain("Start a career in the industry");
+    expect(m.text).toContain("Which area was it in?");
+    expect(m.text).toContain("Beauty Therapy");
+    // No field names leaking through.
+    expect(m.html).not.toMatch(/>priorQual</);
+  });
+
+  it("labels the swipe-deck result as the deck's conclusion, and puts it first", () => {
+    const rows = readableAnswers({ age: "19+", interest: "all" });
+    expect(rows[0]).toEqual(["What they were drawn to (swipe cards)", "I love it all"]);
+    expect(rows[1]).toEqual(["How old will you be when you start the course?", "19+"]);
+  });
+
+  it("keeps an answer it cannot label rather than dropping it", () => {
+    const rows = readableAnswers({ goal: "something-new", retiredQuestion: "x" });
+    expect(rows).toContainEqual(["What would you like to do after your qualification?", "something-new"]);
+    expect(rows).toContainEqual(["retiredQuestion", "x"]);
+  });
+});
+
+describe("ukTime", () => {
+  it("reads as a person would say it, in UK time", () => {
+    // 11:00 UTC in September is 12:00 in London (BST).
+    expect(ukTime("2026-09-23T11:00:00.000Z")).toBe("Wednesday, 23 September 2026 at 12:00 pm");
+  });
+
+  it("follows the clocks going back", () => {
+    // 11:00 UTC in December is 11:00 in London (GMT).
+    expect(ukTime("2026-12-02T11:00:00.000Z")).toBe("Wednesday, 2 December 2026 at 11:00 am");
+  });
+
+  it("says so plainly when there is no usable time", () => {
+    expect(ukTime(null)).toBe("Unknown");
+    expect(ukTime("not a date")).toBe("Unknown");
   });
 });

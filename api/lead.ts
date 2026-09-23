@@ -187,6 +187,7 @@ async function notify(
     savedCourseIds: lead.savedCourseIds,
     matchedCourseIds: lead.matchedCourseIds,
     submittedAt: lead.submittedAt,
+    receivedAt: new Date().toISOString(),
   };
 
   const [staff, learner] = await Promise.allSettled([
