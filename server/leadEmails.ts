@@ -125,11 +125,10 @@ const SITE = "https://www.lcbt.co.uk";
  * replaced — so hotlinking would break the image in every past email the day
  * the homepage changes. The copy here is also 71 KB instead of 659 KB.
  *
- * Override for local testing: an email client fetches images from the public
- * internet, so a banner that only exists on localhost will never load.
+ * Absolute and fixed, because an email client fetches it from the public
+ * internet: it only resolves once this build is live on quiz.lcbt.co.uk.
  */
-const BANNER_URL =
-  process.env.EMAIL_BANNER_URL || "https://quiz.lcbt.co.uk/email/banner.jpg";
+const BANNER_URL = "https://quiz.lcbt.co.uk/email/banner.jpg";
 
 /* Mirrors tokens.css. Repeated rather than imported because email clients
    have no CSS variables — every value has to be inlined at the point of use,
