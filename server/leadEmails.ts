@@ -118,6 +118,19 @@ export function ukTime(iso: string | null | undefined): string {
 
 const SITE = "https://www.lcbt.co.uk";
 
+/**
+ * Served from this app's own public/ folder, not hotlinked from LCBT's
+ * WordPress. Every email already sent keeps pointing at this URL for good,
+ * and the original is a homepage banner — exactly the kind of file that gets
+ * replaced — so hotlinking would break the image in every past email the day
+ * the homepage changes. The copy here is also 71 KB instead of 659 KB.
+ *
+ * Override for local testing: an email client fetches images from the public
+ * internet, so a banner that only exists on localhost will never load.
+ */
+const BANNER_URL =
+  process.env.EMAIL_BANNER_URL || "https://quiz.lcbt.co.uk/email/banner.jpg";
+
 /* Mirrors tokens.css. Repeated rather than imported because email clients
    have no CSS variables — every value has to be inlined at the point of use,
    so these exist to stop the two templates drifting from the app. */
@@ -128,13 +141,20 @@ const BORDER = "#e5dae3";
 const SURFACE = "#f7f2f6";
 
 /** A whole email, wrapped in the brand's shell. */
-function shell(title: string, body: string): string {
+function shell(title: string, body: string, opts: { banner?: boolean } = {}): string {
+  /* width="560" as an attribute, not only CSS: Outlook ignores max-width and
+     would otherwise render the image at its full 1120px. display:block stops
+     the thin gap some clients leave under inline images. */
+  const banner = opts.banner
+    ? `<img src="${BANNER_URL}" width="560" alt="London College of Beauty Therapy" style="display:block;width:100%;max-width:560px;height:auto;border:0">`
+    : "";
   return `
 <div style="margin:0;padding:24px 12px;background:${SURFACE};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
   <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid ${BORDER}">
     <div style="background:${PLUM};padding:18px 24px">
       <div style="color:#ffffff;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase">LCBT Course Match</div>
     </div>
+    ${banner}
     <div style="padding:24px">
       <h1 style="font-size:20px;line-height:1.3;margin:0 0 16px;color:${PLUM}">${title}</h1>
       ${body}
@@ -344,6 +364,7 @@ export function learnerEmail(lead: LeadForEmail) {
     <p style="margin:24px 0 0;font-size:14px"><a href="${SITE}/courses/" style="color:${PINK};font-weight:700;text-decoration:none">Browse every course at LCBT &rarr;</a></p>
     <p style="margin:22px 0 0;padding-top:16px;border-top:1px solid ${BORDER};font-size:11px;line-height:1.6;color:${DIM}">${esc(footer)}</p>
   `,
+    { banner: true },
   );
 
   return { subject, text, html, tag: "course-match-learner" };

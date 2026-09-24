@@ -103,3 +103,21 @@ describe("ukTime", () => {
     expect(ukTime("not a date")).toBe("Unknown");
   });
 });
+
+describe("banner", () => {
+  it("heads the learner email, served from our own domain", () => {
+    const m = learnerEmail(lead());
+    expect(m.html).toContain('src="https://quiz.lcbt.co.uk/email/banner.jpg"');
+    // Outlook ignores max-width, so the attribute has to be there too.
+    expect(m.html).toMatch(/<img[^>]+width="560"/);
+    expect(m.html).toContain('alt="London College of Beauty Therapy"');
+  });
+
+  it("is not hotlinked from LCBT's WordPress", () => {
+    expect(learnerEmail(lead()).html).not.toContain("wp-content/uploads");
+  });
+
+  it("stays out of the staff notification, which is a work item", () => {
+    expect(staffEmail(lead()).html).not.toContain("banner.jpg");
+  });
+});
