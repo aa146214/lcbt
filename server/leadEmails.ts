@@ -343,7 +343,7 @@ export function learnerEmail(lead: LeadForEmail) {
     "",
     ...saved.map(textCourse),
     ...(alsoMatched.length ? ["Also worth a look", "", ...alsoMatched.map(textCourse)] : []),
-    `Browse everything: ${SITE}/courses/`,
+    `Browse all courses: ${SITE}/courses/`,
     "",
     footer,
   ].join("\n");
@@ -360,7 +360,7 @@ export function learnerEmail(lead: LeadForEmail) {
             .join("")}`
         : ""
     }
-    <p style="margin:24px 0 0;font-size:14px"><a href="${SITE}/courses/" style="color:${PINK};font-weight:700;text-decoration:none">Browse every course at LCBT &rarr;</a></p>
+    <p style="margin:24px 0 0;font-size:14px"><a href="${SITE}/courses/" style="color:${PINK};font-weight:700;text-decoration:none">Browse all courses</a></p>
     <p style="margin:22px 0 0;padding-top:16px;border-top:1px solid ${BORDER};font-size:11px;line-height:1.6;color:${DIM}">${esc(footer)}</p>
   `,
     { banner: true },
