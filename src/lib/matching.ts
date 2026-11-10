@@ -22,7 +22,7 @@ import type {
 --------------------------------------------------------- */
 /** Total weight on offer per category, across the whole deck. */
 const CATEGORY_TOTALS: Record<CategoryId, number> = (() => {
-  const totals: Record<CategoryId, number> = { hair: 0, beauty: 0, makeup: 0 };
+  const totals: Record<CategoryId, number> = { hair: 0, beauty: 0, makeup: 0, business: 0 };
   for (const card of vibeCards) {
     for (const [cat, weight] of Object.entries(card.weights)) {
       totals[cat as CategoryId] += weight ?? 0;
@@ -43,7 +43,7 @@ const ALL_THRESHOLD = 0.25;
  * question we actually mean, and it stays correct if the mix changes.
  */
 export function computeInterest(liked: VibeCard[]): InterestId | null {
-  const raw: Record<CategoryId, number> = { hair: 0, beauty: 0, makeup: 0 };
+  const raw: Record<CategoryId, number> = { hair: 0, beauty: 0, makeup: 0, business: 0 };
   for (const card of liked) {
     for (const [cat, weight] of Object.entries(card.weights)) {
       raw[cat as CategoryId] += weight ?? 0;
@@ -105,7 +105,7 @@ export function pruneAnswers(answers: Answers): Answers {
 /**
  * Collapses the two prior-qualification questions into the single axis the
  * spreadsheet branches on. Asked of everyone: a 16-18 learner who has just
- * finished a Level 2 should progress to Level 3, per the sheet's rows 29-36
+ * finished a Level 2 should progress to Level 3, per the sheet's rows 32-39
  * and the college's own "progress onto a Level 3" wording.
  */
 export function getPriorLevel(answers: Answers): PriorLevel {
@@ -138,12 +138,12 @@ function ruleMatches(rule: MatchRule, age: string, priorLevel: PriorLevel): bool
  * Whether this person's own qualification would get them onto the course.
  *
  * The sheet keys its Level 3 recommendations off what somebody swiped, never
- * off what they already hold, and row 36 admits it: "(until we know which
+ * off what they already hold, and row 39 admits it: "(until we know which
  * level 2 they hold)". Now that we ask, we can stop recommending a Level 3
  * they would be turned away from.
  *
  * The subject test is deliberately narrow — it applies only where the sheet's
- * note does, to somebody whose highest qualification is a Level 2. Rows 69-72
+ * note does, to somebody whose highest qualification is a Level 2. Rows 72-75
  * offer a Level 3 holder a sideways move into a different Level 3, and it is
  * the Level 2 underneath that admits them; testing those against this rule
  * would throw away a recommendation the college does make.

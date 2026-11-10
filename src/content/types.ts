@@ -1,4 +1,6 @@
-export type CategoryId = "hair" | "beauty" | "makeup";
+/** "business" is the head-office side of beauty (marketing, buying, brand
+ *  management) rather than a salon subject. */
+export type CategoryId = "hair" | "beauty" | "makeup" | "business";
 export type InterestId = CategoryId | "all";
 export type AgeId = "16-18" | "19+";
 export type PriorLevel = "none" | "Level 2" | "Level 3" | "notsure";

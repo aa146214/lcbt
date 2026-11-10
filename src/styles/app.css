@@ -677,6 +677,15 @@ button { font-family: inherit; }
   background: color-mix(in srgb, var(--tile-color) 8%, #fff);
 }
 .tile-grid__item[data-picked="true"] { transform: scale(0.96); }
+/* An odd tile out (the fifth interest, "I love it all") takes the full row as
+   a short bar rather than sitting alone in half of it - and keeps a third row
+   of squares from pushing the screen past a small phone's height. */
+.tile-grid__item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  aspect-ratio: auto;
+  flex-direction: row;
+  padding: 14px;
+}
 .tile-grid__icon {
   width: 44px;
   height: 44px;

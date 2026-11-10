@@ -1,5 +1,5 @@
 {
-  "_source": "LCBT-Course-Match-Screen-Content.docx s.2-3 (1 Sept 2026).",
+  "_source": "LCBT-Course-Match-Screen-Content.docx s.2-3 (1 Sept 2026). Beauty business cards added 10 Nov 2026 from 'LCBT course finder logic v1-updated.xlsx' rows 29-30, photos supplied by LCBT.",
   "vibeCards": [
     {
       "id": "vibe-hair-trim",
@@ -56,6 +56,22 @@
       "weights": {
         "beauty": 2
       }
+    },
+    {
+      "id": "vibe-business-products",
+      "text": "Picking the next must-have beauty products",
+      "image": "/cards/business-products.jpg",
+      "weights": {
+        "business": 2
+      }
+    },
+    {
+      "id": "vibe-business-brand",
+      "text": "Dreaming up the next big beauty brand",
+      "image": "/cards/business-brand.jpg",
+      "weights": {
+        "business": 2
+      }
     }
   ],
   "interests": [
@@ -73,6 +89,11 @@
       "id": "makeup",
       "label": "Make-Up",
       "phrase": "make-up"
+    },
+    {
+      "id": "business",
+      "label": "Beauty Business",
+      "phrase": "the business side of beauty"
     },
     {
       "id": "all",

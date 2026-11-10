@@ -14,7 +14,7 @@ import type { Answers, InterestId } from "../content/types";
 
 /**
  * Every expectation below is transcribed from
- * "LCBT course finder logic v1.xlsx" (sheet `logic`), with the row range noted
+ * "LCBT course finder logic v1-updated.xlsx" (sheet `logic`), with the row range noted
  * on each block. If the sheet changes, change matching.json and these
  * expectations together — that pairing is the point of this file.
  */
@@ -56,6 +56,22 @@ describe("computeInterest — vibe deck scoring", () => {
     expect(computeInterest([...allBeauty, ...allHair])).toBe("all");
   });
 
+  it("gives the two beauty business cards their own category", () => {
+    expect(
+      computeInterest([card("vibe-business-products"), card("vibe-business-brand")]),
+    ).toBe("business");
+  });
+
+  it("lets a full sweep of the business cards outweigh a single salon card", () => {
+    // Business 100% of what was on offer vs beauty 33%.
+    const liked = [
+      card("vibe-business-products"),
+      card("vibe-business-brand"),
+      card("vibe-beauty-skin"),
+    ];
+    expect(computeInterest(liked)).toBe("business");
+  });
+
   it("needs a lead of more than one point to pick a single category", () => {
     // hair 4 vs beauty 2 — a two-point lead is decisive.
     const liked = [card("vibe-hair-trim"), card("vibe-hair-blowdry"), card("vibe-beauty-skin")];
@@ -83,7 +99,7 @@ describe("getSteps — question gating", () => {
   });
 });
 
-describe("sheet rows 29-36 — 16-18 who already hold a Level 2", () => {
+describe("sheet rows 32-39 — 16-18 who already hold a Level 2", () => {
   const cases: [InterestId, string[]][] = [
     ["beauty", ["l3-beauty"]],
     ["hair", ["l3-hair"]],
@@ -125,12 +141,15 @@ describe("pruneAnswers — going back and changing an answer", () => {
   });
 });
 
-describe("sheet rows 18-27 — 16-18, no previous qualification, recommend Level 2", () => {
+describe("sheet rows 19-30 — 16-18, no previous qualification, recommend Level 2", () => {
   const cases: [InterestId, string[]][] = [
     ["beauty", ["l2-beauty", "l2-mua"]],
     ["hair", ["l2-hair", "l2-mua", "l2-beauty"]],
     ["makeup", ["l2-mua", "l2-beauty", "l2-hair"]],
     ["all", ["l2-mua", "l2-beauty", "l2-hair"]],
+    // Rows 29-30. Their "Explore all Level 2 courses" alternative is the
+    // collection card that no longer goes in a deck.
+    ["business", ["l2-business", "l2-beauty"]],
   ];
 
   it.each(cases)("%s", (interest, expected) => {
@@ -138,8 +157,8 @@ describe("sheet rows 18-27 — 16-18, no previous qualification, recommend Level
   });
 });
 
-describe("sheet rows 39-46 — 19+, no previous qualification", () => {
-  const cases: InterestId[] = ["beauty", "hair", "makeup", "all"];
+describe("sheet rows 42-49 — 19+, no previous qualification", () => {
+  const cases: InterestId[] = ["beauty", "hair", "makeup", "business", "all"];
 
   // Short courses are the sheet's best match here, but they are not in the
   // live catalogue, so the "short courses do not exist" branch applies.
@@ -150,11 +169,12 @@ describe("sheet rows 39-46 — 19+, no previous qualification", () => {
   });
 });
 
-describe("sheet rows 56-62 — 19+ holding a Level 2, no short courses", () => {
+describe("sheet rows 59-65 — 19+ holding a Level 2, no short courses", () => {
   // Resolves to the shared Level 3 diplomas: the live catalogue has one per
   // subject open to both age groups, not separate 19+ courses.
   const cases: [InterestId, string[]][] = [
-    ["beauty", ["l3-beauty"]],
+    // Row 62 adds Hair & Media Make-Up, which a beauty Level 2 also admits.
+    ["beauty", ["l3-beauty", "l3-mua"]],
     ["hair", ["l3-hair", "l3-mua"]],
     ["makeup", ["l3-mua", "l3-hair"]],
     ["all", ["l3-beauty", "l3-hair"]],
@@ -165,7 +185,7 @@ describe("sheet rows 56-62 — 19+ holding a Level 2, no short courses", () => {
   });
 });
 
-describe("sheet rows 66-72 — 19+ holding a Level 3", () => {
+describe("sheet rows 69-75 — 19+ holding a Level 3", () => {
   // Short courses are dropped as unavailable, so these come out short. That is
   // fine: browsing everything is offered on the results panel, not as a card.
   const cases: [InterestId, string[]][] = [
@@ -185,7 +205,7 @@ describe("no 'see all' card inside a deck", () => {
   // swipeable card. The route to it lives on the results panel instead.
   it("never puts a collection card in front of anyone", () => {
     for (const age of ["16-18", "19+"] as const) {
-      for (const interest of ["beauty", "hair", "makeup", "all"] as InterestId[]) {
+      for (const interest of ["beauty", "hair", "makeup", "business", "all"] as InterestId[]) {
         for (const priorQual of ["yes", "no"] as const) {
           for (const level of ["Level 2", "Level 3", "notsure"] as const) {
             const deck = getMatches({ interest, age, priorQual, level }).courses;
@@ -201,7 +221,7 @@ describe("no 'see all' card inside a deck", () => {
 
   it("still gives everyone at least one card", () => {
     for (const age of ["16-18", "19+"] as const) {
-      for (const interest of ["beauty", "hair", "makeup", "all"] as InterestId[]) {
+      for (const interest of ["beauty", "hair", "makeup", "business", "all"] as InterestId[]) {
         expect(getMatches({ interest, age }).courses.length).toBeGreaterThan(0);
       }
     }
@@ -235,7 +255,7 @@ describe("course availability", () => {
     const ages: Answers["age"][] = ["16-18", "19+"];
     const levels: Answers["level"][] = ["Level 2", "Level 3", "notsure"];
     for (const age of ages) {
-      for (const interest of ["beauty", "hair", "makeup", "all"] as InterestId[]) {
+      for (const interest of ["beauty", "hair", "makeup", "business", "all"] as InterestId[]) {
         for (const priorQual of ["yes", "no"] as const) {
           for (const level of levels) {
             ids({ interest, age, priorQual, level }).forEach((id) => everyId.add(id));
@@ -249,7 +269,7 @@ describe("course availability", () => {
 
   it("still produces a deck for every reachable combination", () => {
     for (const age of ["16-18", "19+"] as const) {
-      for (const interest of ["beauty", "hair", "makeup", "all"] as InterestId[]) {
+      for (const interest of ["beauty", "hair", "makeup", "business", "all"] as InterestId[]) {
         expect(getMatches({ interest, age }).courses.length).toBeGreaterThan(0);
       }
     }
@@ -315,7 +335,7 @@ describe("getPriorLevel — collapsing two questions onto the sheet's one axis",
 
 /**
  * Sheet 2, N10-N14: "Which area was it in?" — the question the sheet proposes
- * but never branches on. Row 36 column F says why it is needed: the Level 3
+ * but never branches on. Row 39 column F says why it is needed: the Level 3
  * recommendations hold only "(until we know which level 2 they hold)".
  */
 describe("sheet 2 N10-N14 — the subject of a prior Level 2", () => {
@@ -341,13 +361,13 @@ describe("sheet 2 N10-N14 — the subject of a prior Level 2", () => {
   });
 
   it("resolves 'I love all of it' to what their Level 2 actually opens", () => {
-    // Rows 59-62, the 19+ "all" row, offers beauty therapy and hairdressing.
+    // Rows 62-65, the 19+ "all" row, offers beauty therapy and hairdressing.
     expect(ids(holdsLevel2("hair", "all"))).toEqual(["l3-hair"]);
     expect(ids(holdsLevel2("beauty", "all"))).toEqual(["l3-beauty"]);
   });
 
-  it("does the same to row 36, which is the one the sheet flagged", () => {
-    // Row 36 offers a 16-18 all three Level 3s, noting "(until we know which
+  it("does the same to row 39, which is the one the sheet flagged", () => {
+    // Row 39 offers a 16-18 all three Level 3s, noting "(until we know which
     // level 2 they hold)". Now we know.
     const all = (subject: Answers["subject"]) =>
       ids({ interest: "all", age: "16-18", priorQual: "yes", level: "Level 2", subject });
@@ -429,6 +449,25 @@ describe("the reason line follows whatever actually chose the deck", () => {
     expect(result.basis).toBe("interest");
     expect(buildReasoning(answers, result.basis)).toBe(
       "you're into hairdressing, you're 19+ and you want to start a career",
+    );
+  });
+});
+
+describe("Level 2 Beauty Business & Retail", () => {
+  it("is open to 16-18s only, so no 19+ deck ever contains it", () => {
+    for (const interest of ["beauty", "hair", "makeup", "business", "all"] as InterestId[]) {
+      for (const priorQual of ["yes", "no"] as const) {
+        for (const level of ["Level 2", "Level 3", "notsure"] as const) {
+          expect(ids({ interest, age: "19+", priorQual, level })).not.toContain("l2-business");
+        }
+      }
+    }
+  });
+
+  it("explains the match by the business interest", () => {
+    const answers: Answers = { interest: "business", age: "16-18", goal: "career" };
+    expect(buildReasoning(answers, getMatches(answers).basis)).toBe(
+      "you're into the business side of beauty, you're 16-18 and you want to start a career",
     );
   });
 });

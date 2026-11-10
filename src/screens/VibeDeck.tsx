@@ -31,7 +31,7 @@ export function VibeDeck({ onComplete }: { onComplete: (interest: InterestId) =>
     useSwipeDeck<VibeCard>({
     items: vibeCards,
     // Only the vibe deck teaches the gesture — by the results deck they have
-    // already swiped seven cards.
+    // already swiped the whole vibe deck.
     hint: true,
     onSwipe: (card, direction) => {
       trackQuestionAnswered(card.id, direction === "right" ? "yes" : "no");

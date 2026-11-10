@@ -62,11 +62,14 @@ export function questionById(id: string): Question | undefined {
  * A question's fixed position in the flow, for GA4's `question_number`.
  *
  * Numbered against the full content list rather than the steps a given person
- * actually sees, so a number always means the same question: 1-7 are the vibe
- * cards, 8-11 the quick questions in questions.json order (10 and 11 only
- * apply to 19+), and the last slot is the interest fallback that only appears
- * when someone swipes right on nothing. Stable numbers are what make the
- * per-question drop-off funnel comparable between people.
+ * actually sees, so a number always means the same question: 1-9 are the vibe
+ * cards, 10-14 the quick questions in questions.json order (13 and 14 only
+ * after a yes to prior qualifications), and the last slot is the interest
+ * fallback that only appears when someone swipes right on nothing. Stable
+ * numbers are what make the per-question drop-off funnel comparable between
+ * people. Adding cards shifts everything after them, so compare funnels on
+ * either side of a deck change separately (the deck grew from 7 to 9 on
+ * 10 Nov 2026).
  */
 export function questionNumber(questionId: string): number {
   const vibeIndex = vibeCards.findIndex((c) => c.id === questionId);

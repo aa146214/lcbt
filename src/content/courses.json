@@ -60,6 +60,25 @@
     "startDate": "September 2027",
     "source": "course page"
   },
+  "l2-business": {
+    "id": "l2-business",
+    "kind": "course",
+    "title": "Level 2 Diploma in Beauty Business & Retail",
+    "level": "Level 2",
+    "category": "business",
+    "prerequisite": "none",
+    "audience": "16-18",
+    "blurb": "Explore the entire beauty retail journey from product design, development and launch strategies. Learn buying, marketing and retail management through lessons, workshops and live projects set by LCBT's brand partners.",
+    "duration": "6 months, 5 days a week, including GCSE English & Maths resits",
+    "entryRequirements": "Four GCSEs at grade 3 (or equivalent), including Maths and English",
+    "funding": "Fully funded for eligible 16-18-year-olds",
+    "fundingByAge": {
+      "16-18": "Fully funded for eligible 16-18-year-olds"
+    },
+    "url": "https://www.lcbt.co.uk/courses/level-2-diploma-in-beauty-business-retail/",
+    "startDate": "January 2027",
+    "source": "course page (saved copy, 10 Nov 2026)"
+  },
   "l3-beauty": {
     "id": "l3-beauty",
     "kind": "course",

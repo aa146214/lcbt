@@ -28,6 +28,7 @@
   --cat-hair: var(--pink);
   --cat-beauty: var(--gold);
   --cat-makeup: var(--plum);
+  --cat-business: #7b3f8c;
 
   --font-display: "Gotham", "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-body: "Gotham", "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;

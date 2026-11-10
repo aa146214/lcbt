@@ -8,6 +8,7 @@ import {
   Repeat,
   Rocket,
   Scissors,
+  ShoppingBag,
   Sparkles,
   TrendingUp,
   UserRound,
@@ -28,6 +29,7 @@ export const ICONS: Record<string, LucideIcon> = {
   Repeat,
   Rocket,
   Scissors,
+  ShoppingBag,
   Sparkles,
   TrendingUp,
   UserRound,
@@ -46,11 +48,13 @@ export const CATEGORY_STYLE: Record<
   hair: { color: "var(--cat-hair)", icon: Scissors, label: "Hairdressing" },
   beauty: { color: "var(--cat-beauty)", icon: Sparkles, label: "Beauty Therapy" },
   makeup: { color: "var(--cat-makeup)", icon: Wand2, label: "Make-Up" },
+  business: { color: "var(--cat-business)", icon: ShoppingBag, label: "Beauty Business" },
 };
 
 export const INTEREST_STYLE: Record<InterestId, { color: string; icon: LucideIcon }> = {
   hair: { color: "var(--cat-hair)", icon: Scissors },
   beauty: { color: "var(--cat-beauty)", icon: Sparkles },
   makeup: { color: "var(--cat-makeup)", icon: Wand2 },
+  business: { color: "var(--cat-business)", icon: ShoppingBag },
   all: { color: "var(--pink)", icon: Heart },
 };
