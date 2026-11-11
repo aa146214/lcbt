@@ -146,7 +146,8 @@ describe("sheet rows 19-30 — 16-18, no previous qualification, recommend Level
     ["beauty", ["l2-beauty", "l2-mua"]],
     ["hair", ["l2-hair", "l2-mua", "l2-beauty"]],
     ["makeup", ["l2-mua", "l2-beauty", "l2-hair"]],
-    ["all", ["l2-mua", "l2-beauty", "l2-hair"]],
+    // Beauty Business & Retail added last on LCBT's say-so (11 Nov 2026), not in the sheet.
+    ["all", ["l2-mua", "l2-beauty", "l2-hair", "l2-business"]],
     // Rows 29-30. Their "Explore all Level 2 courses" alternative is the
     // collection card that no longer goes in a deck.
     ["business", ["l2-business", "l2-beauty"]],
