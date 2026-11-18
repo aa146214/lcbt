@@ -159,7 +159,7 @@ describe("sheet rows 19-30 — 16-18, no previous qualification, recommend Level
 });
 
 describe("sheet rows 42-49 — 19+, no previous qualification", () => {
-  const cases: InterestId[] = ["beauty", "hair", "makeup", "business", "all"];
+  const cases: InterestId[] = ["beauty", "hair", "makeup", "all"];
 
   // Short courses are the sheet's best match here, but they are not in the
   // live catalogue, so the "short courses do not exist" branch applies.
@@ -463,6 +463,30 @@ describe("Level 2 Beauty Business & Retail", () => {
         }
       }
     }
+  });
+
+  // LCBT, 18 Nov 2026: everyone else who swipes towards it is told new
+  // beauty business courses are coming, and asked for their email.
+  it("tells everyone it is not open to that beauty business courses are coming", () => {
+    const outsiders: Answers[] = [
+      { age: "16-18", priorQual: "yes", level: "Level 2" },
+      { age: "16-18", priorQual: "yes", level: "Level 3" },
+      { age: "16-18", priorQual: "yes", level: "Level 2", subject: "hair" },
+      { age: "19+", priorQual: "no" },
+      { age: "19+", priorQual: "yes", level: "Level 2" },
+      { age: "19+", priorQual: "yes", level: "Level 2", subject: "beauty" },
+      { age: "19+", priorQual: "yes", level: "Level 3" },
+      { age: "19+", priorQual: "yes", level: "notsure" },
+    ];
+    for (const a of outsiders) {
+      const result = getMatches({ ...a, interest: "business" });
+      expect(result.type).toBe("registerInterest");
+      expect(result.courses.map((c) => c.id)).toEqual(["register-interest-business"]);
+    }
+  });
+
+  it("keeps the generic register-interest message for everyone else", () => {
+    expect(ids({ interest: "beauty", age: "19+", priorQual: "no" })).toEqual(["register-interest"]);
   });
 
   it("explains the match by the business interest", () => {

@@ -68,7 +68,8 @@
     "category": "business",
     "prerequisite": "none",
     "audience": "16-18",
-    "blurb": "Explore the entire beauty retail journey from product design, development and launch strategies. Learn buying, marketing and retail management through lessons, workshops and live projects set by LCBT's brand partners.",
+    "blurb": "Explore the entire beauty retail journey from product design, and development to launch strategies, giving you an insight into how your favourite products go from idea to store. You'll learn about every area of the beauty industry and build skills to help you start a career in beauty marketing, buying or management, or even start your own brand!",
+    "image": "/cards/courses/l2-business.jpg",
     "duration": "6 months, 5 days a week, including GCSE English & Maths resits",
     "entryRequirements": "Four GCSEs at grade 3 (or equivalent), including Maths and English",
     "funding": "Fully funded for eligible 16-18-year-olds",
@@ -247,5 +248,21 @@
     "url": "https://www.lcbt.co.uk/courses/",
     "startDate": null,
     "source": "not a live catalogue entry"
+  },
+  "register-interest-business": {
+    "id": "register-interest-business",
+    "kind": "register-interest",
+    "title": "We don't have a course to match you with now",
+    "level": "Coming soon",
+    "category": "business",
+    "prerequisite": "none",
+    "audience": "all",
+    "blurb": "But we're launching new beauty business courses soon. Enter your email to be the first to know!",
+    "duration": "—",
+    "entryRequirements": "—",
+    "funding": "—",
+    "url": "https://www.lcbt.co.uk/courses/",
+    "startDate": null,
+    "source": "LCBT copy (Anton, 18 Nov 2026), for anyone who swipes towards beauty business but is not a 16-18 with no previous qualification"
   }
 }

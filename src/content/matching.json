@@ -1,5 +1,5 @@
 {
-  "_source": "LCBT course finder logic v1-updated.xlsx - sheet 'logic', rows 19-75, reconciled against the live catalogue at lcbt.co.uk/courses (7 Sept 2026). The sheet's hidden rows 12-14 define separate '19+ Level 3' courses that do not exist on the live site: there is one Level 3 diploma per subject, open to both age groups with different funding. The 19+ rules below therefore resolve to l3-* rather than to separate 19+ course records. Rules are evaluated top to bottom; the first whose `when` clause matches wins. Decks are no longer topped up with a 'see all' card: client feedback (LCBT Quiz Feedback, 9 Sept 2026) was that browsing all courses should not be a swipeable card. The route out now sits on the results panel instead. The 'business' rows: the sheet specifies them only for 16-18 with no previous qualification (rows 29-30). Every other rule's business row repeats its 'all' row as a placeholder until LCBT confirms what those learners should see (questions sent 10 Nov 2026).",
+  "_source": "LCBT course finder logic v1-updated.xlsx - sheet 'logic', rows 19-75, reconciled against the live catalogue at lcbt.co.uk/courses (7 Sept 2026). The sheet's hidden rows 12-14 define separate '19+ Level 3' courses that do not exist on the live site: there is one Level 3 diploma per subject, open to both age groups with different funding. The 19+ rules below therefore resolve to l3-* rather than to separate 19+ course records. Rules are evaluated top to bottom; the first whose `when` clause matches wins. Decks are no longer topped up with a 'see all' card: client feedback (LCBT Quiz Feedback, 9 Sept 2026) was that browsing all courses should not be a swipeable card. The route out now sits on the results panel instead. The 'business' rows: the sheet specifies them only for 16-18 with no previous qualification (rows 29-30). Beauty Business & Retail is for 16-18s with no previous qualification only, so every other rule's business row shows 'register-interest-business' instead: LCBT's 'launching new beauty business courses soon' message, for 19+ and for 16-18s who already hold a Level 2 or 3 alike (confirmed by LCBT, 18 Nov 2026).",
   "rules": [
     {
       "id": "16-18-no-prior",
@@ -59,9 +59,7 @@
           "l3-mua"
         ],
         "business": [
-          "l3-mua",
-          "l3-beauty",
-          "l3-hair"
+          "register-interest-business"
         ],
         "all": [
           "l3-mua",
@@ -92,8 +90,7 @@
           "register-interest"
         ],
         "business": [
-          "short-courses",
-          "register-interest"
+          "register-interest-business"
         ],
         "all": [
           "short-courses",
@@ -121,7 +118,7 @@
           "register-interest"
         ],
         "business": [
-          "register-interest"
+          "register-interest-business"
         ],
         "all": [
           "register-interest"
@@ -153,9 +150,7 @@
           "l3-hair"
         ],
         "business": [
-          "l3-beauty",
-          "l3-hair",
-          "short-courses"
+          "register-interest-business"
         ],
         "all": [
           "l3-beauty",
@@ -186,8 +181,7 @@
           "l3-hair"
         ],
         "business": [
-          "l3-beauty",
-          "l3-hair"
+          "register-interest-business"
         ],
         "all": [
           "l3-beauty",
@@ -216,8 +210,7 @@
           "l3-hair"
         ],
         "business": [
-          "l4-aesthetic",
-          "short-courses"
+          "register-interest-business"
         ],
         "all": [
           "l4-aesthetic",
@@ -244,7 +237,7 @@
           "register-interest"
         ],
         "business": [
-          "register-interest"
+          "register-interest-business"
         ],
         "all": [
           "register-interest"
